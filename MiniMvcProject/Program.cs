@@ -1,3 +1,7 @@
+using MiniMvcProject.Application;
+using MiniMvcProject.Persistance;
+
+
 namespace MiniMvcProject
 {
     public class Program
@@ -8,7 +12,8 @@ namespace MiniMvcProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddPersistenceServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

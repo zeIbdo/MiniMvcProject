@@ -8,7 +8,14 @@ namespace MiniMvcProject.Persistance.Configurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(128);
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            builder.HasOne(c => c.ParentCategory)
+               .WithMany(c => c.SubCategories)
+               .HasForeignKey(c => c.ParentCategoryId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
