@@ -51,8 +51,7 @@ namespace MiniMvcProject.Application.Services.Implementations.Generic
         }
 
         public async Task<ResultViewModel<TVm>> GetAsync(Expression<Func<T, bool>> predicate,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
-            int index = 0, int size = 10, bool enableTracking = true)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
             var entity = await _repository.GetAsync(predicate, include);
 
@@ -62,9 +61,12 @@ namespace MiniMvcProject.Application.Services.Implementations.Generic
             return new ResultViewModel<TVm> { Data = _mapper.Map<TVm>(entity) };
         }
 
-        public async Task<ResultViewModel<IEnumerable<TVm>>> GetListAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+        public async Task<ResultViewModel<IEnumerable<TVm>>> GetListAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>,
+            IIncludableQueryable<T, object>>? include = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            int index = 0, int size = 10, bool enableTracking = true)
         {
-            var entityList = await _repository.GetListAsync(predicate, orderBy, include);
+            var entityList = await _repository.GetListAsync(predicate, orderBy, include,index,size,enableTracking);
 
             if (entityList == null)
                 return new ResultViewModel<IEnumerable<TVm>> { Success = false };

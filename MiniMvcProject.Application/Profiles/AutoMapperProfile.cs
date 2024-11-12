@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using core.Persistance.Paging;
 using MiniMvcProject.Application.ViewModels.AppUserViewModels;
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
 using MiniMvcProject.Application.ViewModels.CategoryViewModels;
@@ -99,6 +100,12 @@ namespace MiniMvcProject.Application.Profiles
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ReverseMap();
+
+
+
+            CreateMap<Paginate<Category>, List<CategoryViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
         }
     }
 }
