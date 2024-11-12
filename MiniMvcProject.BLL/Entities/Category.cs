@@ -1,4 +1,4 @@
-﻿namespace MiniMvcProject.Domain.Entities
+﻿    namespace MiniMvcProject.Domain.Entities
 {
     public class Category:BaseEntity
     {

@@ -64,7 +64,7 @@ namespace MiniMvcProject.Application.Services.Implementations.Generic
         public async Task<ResultViewModel<IEnumerable<TVm>>> GetListAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>,
             IIncludableQueryable<T, object>>? include = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-            int index = 0, int size = 10, bool enableTracking = true)
+            int index = 0, int size = int.MaxValue, bool enableTracking = true)
         {
             var entityList = await _repository.GetListAsync(predicate, orderBy, include,index,size,enableTracking);
 

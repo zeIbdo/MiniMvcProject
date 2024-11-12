@@ -14,7 +14,7 @@ namespace MiniMvcProject.Persistance.Repositories.Abstractions.Generic
         Task<Paginate<T>> GetListAsync(Expression<Func<T, bool>>? predicate = null,
                                         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
                                         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
-                                        int index = 0, int size = 10, bool enableTracking = true);
+                                        int index = 0, int size = int.MaxValue, bool enableTracking = true);
 
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);

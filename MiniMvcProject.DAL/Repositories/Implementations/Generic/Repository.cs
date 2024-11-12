@@ -51,7 +51,7 @@ namespace MiniMvcProject.Persistance.Repositories.Implementations.Generic
         }
 
 
-        public async Task<Paginate<T>> GetListAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, int index = 0, int size = 10, bool enableTracking = true)
+        public async Task<Paginate<T>> GetListAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, int index = 0, int size = int.MaxValue, bool enableTracking = true)
         {
             IQueryable<T> queryable = _context.Set<T>();
 

@@ -23,6 +23,7 @@ namespace MiniMvcProject.Application
             services.AddScoped<IProductImageService, ProductImageManager>();
             services.AddScoped<IBasketItemService, BasketItemManager>();
             services.AddScoped<ITagService, TagManager>();
+            services.AddScoped<ICloudinaryService, CloudinaryManager>();
 
 
             return services;
