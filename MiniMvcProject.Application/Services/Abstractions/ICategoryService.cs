@@ -6,5 +6,6 @@ namespace MiniMvcProject.Application.Services.Abstractions
 {
     public interface ICategoryService : ICrudService<Category,CategoryViewModel, CategoryCreateViewModel, CategoryUpdateViewModel>
     {
+
     }
 }

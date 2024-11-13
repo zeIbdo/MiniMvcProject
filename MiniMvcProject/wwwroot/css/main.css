@@ -21514,3 +21514,28 @@ p.form-messege {
           transform: rotate(90deg); }
   .accordion .card .card-body {
     padding: 0 30px 30px; }
+
+/*writed by me*/
+.product-slider.ibo {
+    display: flex;
+    flex-wrap: wrap;  
+    padding: 20px 0 20px 20px;
+    margin: 0 -10px;  
+    justify-content:space-between;
+}
+
+.single-slide {
+    flex: 0 0 20%;  
+    padding: 0 10px;
+    margin-bottom: 20px; 
+    min-width: 200px;
+}
+
+.product-card {
+    width: 100%;
+}
+
+.card-image img {
+    width: 100%;
+    height: auto;
+}

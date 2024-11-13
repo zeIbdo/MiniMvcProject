@@ -1,5 +1,6 @@
 ﻿@model List<ProductViewModel>
-@foreach (var product in Model)
+
+@foreach (var product in Model )
 {
 
     <div class="single-slide">
@@ -16,14 +17,14 @@
             </div>
             <div class="product-card--body">
                 <div class="card-image">
-                    <img src="image/products/product-1.jpg" alt="">
+                    <img src="~/image/products/product-1.jpg" alt="">
                     <div class="hover-contents">
                         <a href="product-details.html" class="hover-image">
-                            <img src="image/products/product-1.jpg" alt="">
+                            <img src="~/image/products/product-1.jpg" alt="">
                         </a>
                         <div class="hover-btns">
-                            <a href="cart.html" class="single-btn">
-                                <i class="fas fa-shopping-basket"></i>
+                            <a data-product-id="@product.Id" onclick="addToBasket(@product.Id)" class="single-btn">
+                                <i  class="fas fa-shopping-basket"></i>
                             </a>
                             <a href="wishlist.html" class="single-btn">
                                 <i class="fas fa-heart"></i>
@@ -46,3 +47,4 @@
         </div>
     </div>
 }
+

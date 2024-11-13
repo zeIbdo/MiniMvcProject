@@ -20,6 +20,9 @@ namespace MiniMvcProject.Application.Profiles
         public AutoMapperProfile()
         {
 
+            CreateMap<AppUser, RegisterViewModel>().ReverseMap();
+            CreateMap<AppUser, LoginViewModel>().ReverseMap();
+
             CreateMap<Slider, SliderViewModel>().ReverseMap();
             CreateMap<Slider, SliderCreateViewModel>().ReverseMap();
             CreateMap<Slider, SliderUpdateViewModel>().ReverseMap();
@@ -106,6 +109,9 @@ namespace MiniMvcProject.Application.Profiles
             CreateMap<Paginate<Category>, List<CategoryViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
+            CreateMap<Paginate<Product>, List<ProductViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<ProductViewModel>(item)).ToList());
         }
     }
 }

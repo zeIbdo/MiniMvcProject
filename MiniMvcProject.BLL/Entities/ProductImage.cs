@@ -7,7 +7,6 @@
         public bool IsMain { get; set; }
         public bool IsSecondary { get; set; }
         public Product Product { get; set; } = null!;
-        public List<ProductTag> ProductTags { get; set; } = new();
 
     }
 }

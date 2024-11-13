@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.Services.Abstractions.Generic;
 using MiniMvcProject.Application.Services.Implementations;
 using MiniMvcProject.Application.Services.Implementations.Generic;
+using MiniMvcProject.DAL.DataContext;
+using MiniMvcProject.Domain.Entities;
 using System.Reflection;
 
 namespace MiniMvcProject.Application
@@ -24,7 +27,22 @@ namespace MiniMvcProject.Application
             services.AddScoped<IBasketItemService, BasketItemManager>();
             services.AddScoped<ITagService, TagManager>();
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
+            services.AddScoped<IAccountService, AccountManager>();
+            services.AddScoped<IBasketService, BasketManager>();
+            services.AddIdentity<AppUser,IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
 
+                options.User.RequireUniqueEmail = true;
+
+
+
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
             return services;
         }

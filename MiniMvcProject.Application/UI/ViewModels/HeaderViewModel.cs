@@ -6,6 +6,7 @@ namespace MiniMvcProject.Application.UI.ViewModels
     public class HeaderViewModel
     {
         public string? SupportNumber { get; set; }
-        public List<CategoryViewModel>? Categories { get; set; }
+        public List<CategoryViewModel> Categories { get; set; } = new();
+        public List<BasketViewModel> Baskets { get; set; } = new();
     }
 }
