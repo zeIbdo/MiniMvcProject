@@ -5,7 +5,9 @@ namespace MiniMvcProject.Application.UI.ViewModels
 {
     public class BasketViewModel
     {
-        public ProductViewModel Product { get; set; } = null!;
+        public int ProductId { get; set; }
+        public decimal ProductPrice { get; set; }
+        public string ProductName { get; set; }
         public int Count { get; set; }
     }
 }

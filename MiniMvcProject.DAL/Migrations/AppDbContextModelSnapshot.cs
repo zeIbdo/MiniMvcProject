@@ -549,7 +549,7 @@ namespace MiniMvcProject.Persistance.Migrations
                         .IsRequired();
 
                     b.HasOne("MiniMvcProject.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("BasketItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -618,6 +618,8 @@ namespace MiniMvcProject.Persistance.Migrations
 
             modelBuilder.Entity("MiniMvcProject.Domain.Entities.Product", b =>
                 {
+                    b.Navigation("BasketItems");
+
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductTags");

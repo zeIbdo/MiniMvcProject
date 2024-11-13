@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using core.Persistance.Paging;
+using MiniMvcProject.Application.UI.ViewModels;
 using MiniMvcProject.Application.ViewModels.AppUserViewModels;
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
 using MiniMvcProject.Application.ViewModels.CategoryViewModels;
@@ -19,6 +20,9 @@ namespace MiniMvcProject.Application.Profiles
     {
         public AutoMapperProfile()
         {
+
+            CreateMap<BasketItemViewModel, BasketItemUpdateViewModel>();
+
 
             CreateMap<AppUser, RegisterViewModel>().ReverseMap();
             CreateMap<AppUser, LoginViewModel>().ReverseMap();
@@ -85,17 +89,18 @@ namespace MiniMvcProject.Application.Profiles
                 .ReverseMap();
 
             CreateMap<BasketItem, BasketItemViewModel>()
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))  
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.AppUserId))
+                .ForMember(dest => dest.AppUserName, opt => opt.MapFrom(src => src.AppUserId))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
                 .ReverseMap();
             CreateMap<BasketItem, BasketItemCreateViewModel>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.AppUserId))
+                .ForMember(dest => dest.AppUserName, opt => opt.MapFrom(src => src.AppUserId))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
                 .ReverseMap();
             CreateMap<BasketItem, BasketItemUpdateViewModel>().ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(dest => dest.AppUserId, opt => opt.MapFrom(src => src.AppUserId))
+                .ForMember(dest => dest.AppUserName, opt => opt.MapFrom(src => src.AppUserId))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
                 .ReverseMap();
             CreateMap<AppUser, AppUserViewModel>()
@@ -109,9 +114,18 @@ namespace MiniMvcProject.Application.Profiles
             CreateMap<Paginate<Category>, List<CategoryViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
+            CreateMap<Paginate<BasketItem>, List<BasketItemViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<BasketItemViewModel>(item)).ToList());
             CreateMap<Paginate<Product>, List<ProductViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<ProductViewModel>(item)).ToList());
+
+            CreateMap<BasketItemViewModel, BasketViewModel>()
+           .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+           .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.MainPrice)) 
+           .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))   
+           .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count)).ReverseMap();
         }
     }
 }

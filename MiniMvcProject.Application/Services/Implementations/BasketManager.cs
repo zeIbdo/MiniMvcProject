@@ -3,6 +3,10 @@ using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.Utilities;
 using MiniMvcProject.Application.UI.ViewModels;
 using Newtonsoft.Json;
+using AutoMapper;
+using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
+using MiniMvcProject.Domain.Entities;
+using System.Security.Claims;
 
 namespace MiniMvcProject.Application.Services.Implementations
 {
@@ -10,18 +14,22 @@ namespace MiniMvcProject.Application.Services.Implementations
     {
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IProductService _productService;
+        private readonly IBasketItemService _basketItemService;
+        private readonly IMapper _mapper;
         private readonly string BASKET_KEY;
 
-        public BasketManager(IHttpContextAccessor contextAccessor, IProductService productService)
+        public BasketManager(IHttpContextAccessor contextAccessor, IProductService productService, IBasketItemService basketItemService, IMapper mapper)
         {
             _contextAccessor = contextAccessor;
             _productService = productService;
             BASKET_KEY = Constants.PUSKAT_BASKET_KEY;
+            _basketItemService = basketItemService;
+            _mapper = mapper;
         }
 
-        public async Task<string> AddProductsToCookieBasketAsync(int productId)
+        public async Task AddProductsToCookieBasketAsync(int productId)
         {
-            var productResult= await _productService.GetAsync(productId);
+            var productResult = await _productService.GetAsync(productId);
 
             var basket = _contextAccessor.HttpContext.Request.Cookies[BASKET_KEY];
 
@@ -32,7 +40,7 @@ namespace MiniMvcProject.Application.Services.Implementations
                 basketVms = JsonConvert.DeserializeObject<List<BasketViewModel>>(basket) ?? new();
             }
 
-            var exists = basketVms.FirstOrDefault(x => x.Product.Id == productId);
+            var exists = basketVms.FirstOrDefault(x => x.ProductId == productId);
 
             if (exists != null)
                 exists.Count++;
@@ -41,7 +49,10 @@ namespace MiniMvcProject.Application.Services.Implementations
                 BasketViewModel basketViewModel = new BasketViewModel()
                 {
                     Count = 1,
-                    Product = productResult.Data
+                    ProductId = productId,
+                    ProductName = productResult.Data.Name,
+                    ProductPrice = productResult.Data.MainPrice,
+                    //ProductImageUrl = productResult.Data.Images.FirstOrDefault(x => x.IsMain == true).ImageUrl
                 };
                 basketVms.Add(basketViewModel);
             }
@@ -50,23 +61,42 @@ namespace MiniMvcProject.Application.Services.Implementations
 
             _contextAccessor.HttpContext.Response.Cookies.Append(BASKET_KEY, json);
 
-            return json;
         }
 
-        public Task<string> AddProductsToDbBasketAsync(int productId)
+        public async Task AddProductsToDbBasketAsync(int productId)
         {
-            throw new NotImplementedException();
-        }
+            var userId = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var basketItemResult = await _basketItemService.GetAsync(x => x.ProductId == productId && x.AppUserId == userId,
+                enableTracking: false);
 
-        public List<BasketViewModel> GetBasket()
+            if (basketItemResult.Data != null)
+            {
+                var viewModel = _mapper.Map<BasketItemUpdateViewModel>(basketItemResult.Data);
+                viewModel.Count++;
+                await _basketItemService.UpdateAsync(viewModel);
+            }
+            else
+            {
+                BasketItemCreateViewModel basketItemCreateViewModel = new BasketItemCreateViewModel { ProductId = productId, Count = 1, 
+                    AppUserName = userId };
+                await _basketItemService.CreateAsync(basketItemCreateViewModel);
+
+            }
+        }
+     
+        public async Task AddToBasketAsync(int productId)
         {
-            var basket = _contextAccessor.HttpContext.Request.Cookies[BASKET_KEY];
+            if(!_contextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                await AddProductsToCookieBasketAsync(productId);
+            }
+            else
+            {
+                await AddProductsToDbBasketAsync(productId);
+            }
 
-            var basketVms = string.IsNullOrEmpty(basket)
-            ? new List<BasketViewModel>()
-            : JsonConvert.DeserializeObject<List<BasketViewModel>>(basket) ?? new List<BasketViewModel>();
-
-            return basketVms;
         }
+
+    
     }
 }

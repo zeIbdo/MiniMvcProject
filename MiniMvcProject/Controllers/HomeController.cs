@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.UI.ViewModels;
+using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
 using System.Diagnostics;
 
 namespace MiniMvcProject.Controllers
@@ -11,11 +13,15 @@ namespace MiniMvcProject.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
         private readonly IBasketService _basketService;
-        public HomeController(ICategoryService categoryService, IProductService productService, IBasketService basketService)
+        private readonly IBasketItemService _basketItemService;
+        private readonly IMapper _mapper;
+        public HomeController(ICategoryService categoryService, IProductService productService, IBasketService basketService, IBasketItemService basketItemService, IMapper mapper)
         {
             _categoryService = categoryService;
             _productService = productService;
             _basketService = basketService;
+            _basketItemService = basketItemService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -37,15 +43,18 @@ namespace MiniMvcProject.Controllers
 
         public async Task<IActionResult> AddToBasket(int productId)
         {
-            await _basketService.AddProductsToCookieBasketAsync(productId);
-            var basketItems = _basketService.GetBasket();
-            return PartialView("_BasketPartial", basketItems);
+            await _basketService.AddToBasketAsync(productId);
+
+            var basketDbItems = await _basketItemService.GetBasketAsync();
+            return PartialView("_BasketDbPartial", basketDbItems);
         }
 
-        public IActionResult UpdateBasketPartial()
+
+        [HttpGet]
+        public async Task<IActionResult> GetBasket()
         {
-            var basketItems =  _basketService.GetBasket();
-            return PartialView("_BasketPartial", basketItems);
+            var basketItems = await _basketItemService.GetBasketAsync();
+            return PartialView("_BasketDbPartial", basketItems); 
         }
     }
 }

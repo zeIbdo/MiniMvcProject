@@ -17,6 +17,7 @@
         public Category Category { get; set; } = null!;
         public List<ProductImage> ProductImages { get; set; } = new();
         public List<ProductTag> ProductTags { get; set; } = new();
+        public List<BasketItem> BasketItems { get; set; } = new();
 
     }
 }

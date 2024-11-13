@@ -2,9 +2,9 @@
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
 using MiniMvcProject.Domain.Entities;
 
-namespace MiniMvcProject.Application.Services.Abstractions
+namespace MiniMvcProject.Application.Services.Abstractions;
+
+public interface IBasketItemService : ICrudService<BasketItem, BasketItemViewModel, BasketItemCreateViewModel, BasketItemUpdateViewModel>
 {
-    public interface IBasketItemService : ICrudService<BasketItem, BasketItemViewModel, BasketItemCreateViewModel, BasketItemUpdateViewModel>
-    {
-    }
+    Task<List<BasketItemViewModel>> GetBasketAsync();
 }

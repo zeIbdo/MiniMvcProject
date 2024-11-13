@@ -14,7 +14,7 @@ namespace MiniMvcProject.Application.Services.Abstractions.Generic
         Task<ResultViewModel<TVm>> GetAsync(int id);
 
         Task<ResultViewModel<TVm>> GetAsync(Expression<Func<T, bool>> predicate,
-                                   Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+                                   Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool enableTracking = true);
         Task<ResultViewModel<IEnumerable<TVm>>> GetListAsync(Expression<Func<T, bool>>? predicate = null,
                                          Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
                                          Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
@@ -22,5 +22,8 @@ namespace MiniMvcProject.Application.Services.Abstractions.Generic
         Task<ResultViewModel<TVm>> CreateAsync(TCrVm createViewModel);
         Task<ResultViewModel<TVm>> UpdateAsync(TUpVm entity);
         Task<ResultViewModel<TVm>> RemoveAsync(int id);
+        Task<ResultViewModel<TUpVm>> GetUpdateViewModel(Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        Task SaveChangesAsync();
     }
 }

@@ -9,7 +9,7 @@ namespace MiniMvcProject.Persistance.Repositories.Abstractions.Generic
     {
         Task<T?> GetAsync(int id);
 
-        Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool enableTracking = true);
 
         Task<Paginate<T>> GetListAsync(Expression<Func<T, bool>>? predicate = null,
                                         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
@@ -19,5 +19,6 @@ namespace MiniMvcProject.Persistance.Repositories.Abstractions.Generic
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<T> DeleteAsync(T entity);
+        Task<int> SaveChangesAsync();
     }
 }

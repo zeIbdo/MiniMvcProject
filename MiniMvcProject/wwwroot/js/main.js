@@ -14,10 +14,24 @@ async function addToBasket(id) {
         const response = await fetch(`/Home/AddToBasket?productId=${id}`);
         const html = await response.text(); 
 
-        document.querySelector('.cart-dropdown-block').innerHTML += html;
+        const cartDropdown = document.querySelector('.cart-dropdown-block');
+        cartDropdown.innerHTML = ""; 
+        cartDropdown.innerHTML = html; 
     }
     catch (error) {
         console.error('Error fetching products:', error);
 
     }
 }
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const response = await fetch('/Home/GetBasket');
+        if (!response.ok) throw new Error('Failed to load basket');
+
+        const html = await response.text();
+        const cartDropdown = document.querySelector('.cart-dropdown-block');
+        cartDropdown.innerHTML = html; 
+    } catch (error) {
+        console.error('Error loading basket:', error);
+    }
+});

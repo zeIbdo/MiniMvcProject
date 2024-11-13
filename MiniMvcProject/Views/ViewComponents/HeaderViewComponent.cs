@@ -21,12 +21,10 @@ namespace MiniMvcProject.MVC.Views.ViewComponents
         {
             var resultSupportNumber = await _settingService.GetAsync(x => x.Key.ToLower() == "supportnumber");
             var resultCategories = await _categoryService.GetListAsync();
-            var basketVms = _basketService.GetBasket();
             var headerViewModel = new HeaderViewModel()
             {
                 SupportNumber = resultSupportNumber.Data!.Value,
                 Categories = resultCategories.Data!.ToList(),
-                Baskets= basketVms
             };
             return View(headerViewModel);
         }

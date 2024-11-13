@@ -41,9 +41,11 @@ namespace MiniMvcProject.Persistance.Repositories.Implementations.Generic
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool enableTracking = true)
         {
             var query = _context.Set<T>().AsQueryable();
+
+            if(!enableTracking) query=  query.AsNoTracking();
 
             if (include != null) query = include(query);
 
@@ -64,6 +66,11 @@ namespace MiniMvcProject.Persistance.Repositories.Implementations.Generic
             if (orderBy != null) queryable = orderBy(queryable);
 
             return await queryable.ToPaginateAsync(index, size);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+           return await _context.SaveChangesAsync();
         }
 
         public async Task<T> UpdateAsync(T entity)

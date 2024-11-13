@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MiniMvcProject.MVC.FilterAttributes
+namespace MiniMvcProject.ADMIN.FilterAttributes
 {
     public class ValidateModelStateAttribute : ActionFilterAttribute
     {
