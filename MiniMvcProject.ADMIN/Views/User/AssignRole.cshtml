@@ -1,0 +1,22 @@
+﻿@model AppUserRoleChangeViewModel
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Change Role</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All">
+                </div>
+                
+                <label for="Role">Select Role</label>
+                <select asp-for="Role" asp-items="Model.Roles" class="form-control">
+                    <option value="">-- Select a Role --</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary mr-2">Create</button>
+                <a asp-controller="category" asp-action="index" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

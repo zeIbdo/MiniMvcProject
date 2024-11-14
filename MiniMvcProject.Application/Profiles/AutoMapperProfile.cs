@@ -136,6 +136,9 @@ namespace MiniMvcProject.Application.Profiles
            .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.MainPrice))
            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
            .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count)).ReverseMap();
+
+
+            CreateMap<AppUser, AppUserViewModel>().ReverseMap();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task AddProductsToCookieBasketAsync(int productId)
+        public async Task<List<BasketItemViewModel>> AddProductsToCookieBasketAsync(int productId)
         {
             var productResult = await _productService.GetAsync(productId);
 
@@ -60,6 +60,8 @@ namespace MiniMvcProject.Application.Services.Implementations
             var json = JsonConvert.SerializeObject(basketVms);
 
             _contextAccessor.HttpContext.Response.Cookies.Append(BASKET_KEY, json);
+
+            return _mapper.Map<List<BasketItemViewModel>>(basketVms);
 
         }
 

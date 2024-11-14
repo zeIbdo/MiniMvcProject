@@ -29,6 +29,7 @@ namespace MiniMvcProject.Application
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<IAccountService, AccountManager>();
             services.AddScoped<IBasketService, BasketManager>();
+            services.AddScoped<IUserService, UserService>();
             services.AddIdentity<AppUser,IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;

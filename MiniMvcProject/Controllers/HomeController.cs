@@ -43,10 +43,19 @@ namespace MiniMvcProject.Controllers
 
         public async Task<IActionResult> AddToBasket(int productId)
         {
-            await _basketService.AddToBasketAsync(productId);
+            if (!HttpContext.User.Identity.IsAuthenticated)
+            {
+                await _basketService.AddProductsToDbBasketAsync(productId);
+                var basketDbItems = await _basketItemService.GetBasketAsync();
+                return PartialView("_BasketDbPartial", basketDbItems);
 
-            var basketDbItems = await _basketItemService.GetBasketAsync();
-            return PartialView("_BasketDbPartial", basketDbItems);
+            }
+            else
+            {
+                var vms = await _basketService.AddProductsToCookieBasketAsync(productId);
+                var basketDbItems = await _basketItemService.GetBasketAsync(vms);
+                return PartialView("_BasketDbPartial", basketDbItems);
+            }
         }
 
 
@@ -54,7 +63,7 @@ namespace MiniMvcProject.Controllers
         public async Task<IActionResult> GetBasket()
         {
             var basketItems = await _basketItemService.GetBasketAsync();
-            return PartialView("_BasketDbPartial", basketItems); 
+            return PartialView("_BasketDbPartial", basketItems);
         }
     }
 }

@@ -228,6 +228,7 @@
                         </ul>
                     </div>
                     </li>
+
                     <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                         <i class="mdi mdi-circle-outline menu-icon"></i>
@@ -240,6 +241,31 @@
                             <li class="nav-item"> <a class="nav-link" asp-controller="setting" asp-action="create">Create Setting</a></li>
                         </ul>
                     </div>
+                    </li> 
+                    <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="mdi mdi-circle-outline menu-icon"></i>
+                        <span class="menu-title">Service</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" asp-controller="service" asp-action="index">Service list</a></li>
+                            <li class="nav-item"> <a class="nav-link" asp-controller="service" asp-action="create">Create Service</a></li>
+                        </ul>
+                    </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="mdi mdi-circle-outline menu-icon"></i>
+                            <span class="menu-title">Users</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" asp-controller="user" asp-action="index">User list</a></li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pages/forms/basic_elements.html">

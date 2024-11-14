@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.ProductViewModels;
@@ -6,6 +7,7 @@ using MiniMvcProject.Application.ViewModels.ProductViewModels;
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -72,6 +74,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _productService.SoftDeleteProductAsync(id);

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.SliderViewModels;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class SliderController : Controller
     {
         private readonly ISliderService _sliderService;
@@ -65,6 +67,8 @@ namespace MiniMvcProject.ADMIN.Controllers
              return RedirectToAction(nameof(Index));
         }
 
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _sliderService.RemoveAsync(id);

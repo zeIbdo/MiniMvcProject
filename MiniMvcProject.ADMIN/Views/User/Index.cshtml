@@ -1,0 +1,38 @@
+﻿@model List<AppUserViewModel>
+
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Categories</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Email</td>
+                                    <td>
+                                        <a class="btn btn-warning" asp-controller="user" asp-action="assignRole" asp-route-id="@item.Id">Change Role</a>
+                                        <a class="btn btn-danger" asp-controller="user" asp-action="delete" asp-route-id="@item.Id">Change Status</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

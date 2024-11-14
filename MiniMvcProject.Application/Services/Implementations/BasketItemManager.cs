@@ -29,8 +29,8 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
 
     public async Task<List<BasketItemViewModel>> GetBasketAsync()
     {
-        if (_checkAuthorized())
-        {
+        
+        
             var userId = _getUserId();
 
 
@@ -39,29 +39,7 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
             var vms = _mapper.Map<List<BasketItemViewModel>>(basketItems);
 
             return vms;
-        }
-        else
-        {
-            var basketItems = _readBasketFromCookie();
-
-            var dtos = _mapper.Map<List<BasketItemViewModel>>(basketItems);
-
-
-            foreach (var dto in dtos)
-            {
-                var product = await _productService.GetAsync(dto.ProductId);
-
-                if (product.Data is null)
-                {
-                    dtos.Remove(dto);
-                    continue;
-                }
-                dto.Product = product.Data;
-            }
-          
-
-            return dtos;
-        }
+       
 
     }
     private List<BasketViewModel> _readBasketFromCookie()
@@ -82,5 +60,28 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
     private bool _checkAuthorized()
     {
         return _contextAccessor.HttpContext.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    public async Task<List<BasketItemViewModel>> GetBasketAsync(List<BasketItemViewModel> models)
+    {
+       
+            var dtos = models;  
+
+
+            foreach (var dto in dtos)
+            {
+                var product = await _productService.GetAsync(dto.ProductId);
+
+                if (product.Data is null)
+                {
+                    dtos.Remove(dto);
+                    continue;
+                }
+                dto.Product = product.Data;
+            }
+
+
+            return dtos;
+        
     }
 }

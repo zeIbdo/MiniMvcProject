@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.SettingViewModels;
 using MiniMvcProject.Application.ViewModels.TagViewModels;
@@ -6,6 +7,7 @@ using MiniMvcProject.Application.ViewModels.TagViewModels;
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class SettingController : Controller
     {
         private readonly ISettingService _settingService;
@@ -63,6 +65,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _settingService.RemoveAsync(id);

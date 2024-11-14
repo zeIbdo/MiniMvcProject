@@ -7,4 +7,5 @@ namespace MiniMvcProject.Application.Services.Abstractions;
 public interface IBasketItemService : ICrudService<BasketItem, BasketItemViewModel, BasketItemCreateViewModel, BasketItemUpdateViewModel>
 {
     Task<List<BasketItemViewModel>> GetBasketAsync();
+    Task<List<BasketItemViewModel>> GetBasketAsync(List<BasketItemViewModel> models);
 }

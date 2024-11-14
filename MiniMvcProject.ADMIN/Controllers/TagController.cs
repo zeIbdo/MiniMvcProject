@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.TagViewModels;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class TagController : Controller
     {
         private readonly ITagService _tagService;
@@ -64,6 +66,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+    [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _tagService.RemoveAsync(id);

@@ -13,7 +13,7 @@ namespace MiniMvcProject.ADMIN
             builder.Services.AddControllersWithViews();
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
-
+            //builder.Services.AddAuthentication();
 
             var app = builder.Build();
 
@@ -30,6 +30,8 @@ namespace MiniMvcProject.ADMIN
 
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

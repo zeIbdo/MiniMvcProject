@@ -2,10 +2,12 @@
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.ADMIN.FilterAttributes;
 using MiniMvcProject.Application.ViewModels.CategoryViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -74,6 +76,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _categoryService.RemoveAsync(id);

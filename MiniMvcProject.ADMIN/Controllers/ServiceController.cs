@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.ServiceViewModels;
 using MiniMvcProject.Application.ViewModels.SliderViewModels;
@@ -6,6 +7,7 @@ using MiniMvcProject.Application.ViewModels.SliderViewModels;
 namespace MiniMvcProject.ADMIN.Controllers
 {
     [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Moderator")]
     public class ServiceController : Controller
     {
         private readonly IServiceService _serviceService;
@@ -68,6 +70,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _serviceService.RemoveAsync(id);
