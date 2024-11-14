@@ -22,7 +22,7 @@ namespace MiniMvcProject
                 await SeedData.Initialize(services);
 
             }
-
+            //test
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
