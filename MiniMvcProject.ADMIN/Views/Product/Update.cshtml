@@ -73,6 +73,53 @@
                     <select asp-items="Model.NewTags" asp-for="NewTagIds" class="form-control" placeholder="Tag"></select>
                 </div>
 
+                <div class="form-group">
+                    <img src="@Model.MainImageUrl" style="height:150px; width:115px; border-radius:0px" />
+                    <input type="hidden" asp-for="MainImageUrl" />
+                    <label>Main Image</label>
+                    <input asp-for="MainImage" class="form-control" placeholder="parent id">
+                </div>
+
+                <div class="form-group">
+                    <img src="@Model.SecondaryImageUrl" style="height:150px; width:115px; border-radius:0px" />
+                    <input type="hidden" asp-for="SecondaryImageUrl" />
+                    <label>Hover Image</label>
+                    <input asp-for="HoverImage" class="form-control" placeholder="parent id">
+                </div>
+
+                @for (int i = 0; i < Model.AdditonalImageUrls.Count; i++)
+                {
+                    <div style="position: relative; display: inline-block; margin-right: 10px;">
+                        <div style="position: relative;">
+                            <img src="@Model.AdditonalImageUrls[i]" style="height:150px; width:115px; border-radius:0px" />
+                            <button data-id="@Model.AdditonalImageIds[i]"
+                                    onclick="markImageForDeletion(this)" type="button" class="buttonRemove btn btn-danger" style="position: absolute;
+                                                                                            top: 5px;
+                                                                                            right: 5px;
+                                                                                            width: 24px;
+                                                                                            height: 24px;
+                                                                                            padding: 0;
+                                                                                            display: flex;
+                                                                                            align-items: center;
+                                                                                            justify-content: center;
+                                                                                            font-size: 16px;
+                                                                                            line-height: 1;
+                                                                                            border-radius: 50%;
+                                                                                                    ">
+                                x
+                            </button>
+                            <input asp-for="AdditonalImageUrls" type="hidden" value="@Model.AdditonalImageUrls[i]" />
+
+                        </div>
+                    </div>
+
+                }
+                <input type="hidden" name="ImagesToDelete" id="ImagesToDelete" />
+                <div class="form-group">
+                    <label>Additional Images</label>
+                    <input asp-for="AdditionalImages" class="form-control" placeholder="parent id">
+                </div>
+
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <a asp-controller="product" asp-action="index" class="btn btn-light">Cancel</a>
             </form>

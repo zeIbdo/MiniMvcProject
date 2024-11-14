@@ -21,8 +21,9 @@ namespace MiniMvcProject.Application.Services.Implementations
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IRepository<Product> _repository;
         private readonly IProductTagService _productTagService;
+        private readonly IProductImageService _productImageService;
         private readonly IMapper _mapper;
-        public ProductManager(IRepository<Product> repository, IMapper mapper, ICategoryService categoryService, ITagService tagService, ICloudinaryService cloudinaryService, IProductTagService productTagService) : base(repository, mapper)
+        public ProductManager(IRepository<Product> repository, IMapper mapper, ICategoryService categoryService, ITagService tagService, ICloudinaryService cloudinaryService, IProductTagService productTagService, IProductImageService productImageService) : base(repository, mapper)
         {
             _categoryService = categoryService;
             _tagService = tagService;
@@ -30,6 +31,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             _repository = repository;
             _mapper = mapper;
             _productTagService = productTagService;
+            _productImageService = productImageService;
         }
 
         public async Task<ProductCreateViewModel> GetProductCreateViewModelAsync(ProductCreateViewModel productCreateViewModel)
@@ -59,7 +61,7 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public async Task<ResultViewModel<ProductUpdateViewModel>> GetProductUpdateViewModelAsync(int id)
         {
-            var product = await _repository.GetAsync(x => x.Id == id, include: x => x.Include(x => x.ProductTags).ThenInclude(y => y.Tag), enableTracking: false);
+            var product = await _repository.GetAsync(x => x.Id == id, include: x => x.Include(x => x.ProductTags).ThenInclude(y => y.Tag).Include(x => x.ProductImages), enableTracking: false);
             if (product == null)
                 return new ResultViewModel<ProductUpdateViewModel>()
                 {
@@ -93,27 +95,63 @@ namespace MiniMvcProject.Application.Services.Implementations
             var vm = new ProductUpdateViewModel()
             {
                 Categories = categoryListItems,
-
+                Brand=null!,
+                Code = null!,
+                Description = null!,
+                Name = null!,
                 OldTags = oldTagItems,
                 NewTags = newTagItems
             };
-            vm = _mapper.Map(product,vm);
+
+            var mainImgUrl = product.ProductImages.FirstOrDefault(x => x.IsMain == true)!.ImageUrl;
+            var hoverImgUrl = product.ProductImages.FirstOrDefault(x => x.IsSecondary == true)!.ImageUrl;
+            var additionalUrls = new List<string>();
+            var additionalIds = new List<int>();
+            foreach (var image in product.ProductImages)
+            {
+                if (image.IsMain == false && image.IsSecondary == false)
+                {
+                    additionalUrls.Add(image.ImageUrl);
+                    additionalIds.Add(image.Id);
+                }
+            }
+            vm.AdditonalImageUrls = additionalUrls;
+            vm.MainImageUrl = mainImgUrl;
+            vm.SecondaryImageUrl = hoverImgUrl;
+            vm.AdditonalImageIds = additionalIds;
+            vm = _mapper.Map(product, vm);
             return new ResultViewModel<ProductUpdateViewModel>() { Data = vm, Success = true };
         }
 
 
         public override async Task<ResultViewModel<ProductViewModel>> UpdateAsync(ProductUpdateViewModel vm)
         {
-            var product = await _repository.GetAsync(vm.Id);
+            if (!(vm.Rating <= 5 && vm.Rating >= 0))
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "Rating must be between 0 and 5" };
+
+            var result = _validate(vm.MainPrice);
+            if (result != null) return result;
+
+            result = _validate(vm.DiscountPrice);
+            if (result != null) return result;
+
+            result = _validate(vm.RewardPoints);
+            if (result != null) return result;
+
+            result = _validate(vm.StockAmount);
+            if (result != null) return result;
+
+
+            var product = await _repository.GetAsync(x => x.Id == vm.Id, include: x => x.Include(x => x.ProductImages));
 
             if (product == null)
                 return new ResultViewModel<ProductViewModel>() { Message = "not found" };
 
-            product = _mapper.Map(vm,product);
+            product = _mapper.Map(vm, product);
 
-            foreach(var item in vm.OldTagIds ?? new List<int>())
-            {   
-                var deletedTag = await _productTagService.GetAsync(x=> x.ProductId==vm.Id&&x.TagId==item);
+            foreach (var item in vm.OldTagIds ?? new List<int>())
+            {
+                var deletedTag = await _productTagService.GetAsync(x => x.ProductId == vm.Id && x.TagId == item);
 
                 if (deletedTag.Data == null) continue;
 
@@ -126,13 +164,60 @@ namespace MiniMvcProject.Application.Services.Implementations
                 await _productTagService.CreateAsync(prTag);
             }
 
-            var result = await _repository.UpdateAsync(product);
+            if (vm.MainImage != null)
+            {
+                var existingMainImage = product.ProductImages.FirstOrDefault(x => x.IsMain == true);
+                _cloudinaryService.ImageDelete(existingMainImage!.ImageUrl);
+                string newMainUrl = await _cloudinaryService.ImageCreateAsync(vm.MainImage);
+                existingMainImage.ImageUrl = newMainUrl;
+                await _productImageService.SaveChangesAsync();
+            }
+            if (vm.HoverImage != null)
+            {
+                var existingHoverImage = product.ProductImages.FirstOrDefault(x => x.IsSecondary == true);
+                _cloudinaryService.ImageDelete(existingHoverImage!.ImageUrl);
+                string newHoverUrl = await _cloudinaryService.ImageCreateAsync(vm.HoverImage);
+                existingHoverImage.ImageUrl = newHoverUrl;
+                await _productImageService.SaveChangesAsync();
+            }
+
+            var existingAdditionalImages = product.ProductImages
+                .Where(x => !x.IsMain && !x.IsSecondary)
+                .ToList();
+
+            var imageIdsToDelete = vm.ImagesToDelete?.Split(',').Select(int.Parse).ToList() ?? new List<int>();
+
+            foreach (var imageId in imageIdsToDelete)
+            {
+                var additionalImage = product.ProductImages.FirstOrDefault(x => x.Id == imageId);
+                if (additionalImage != null)
+                {
+                    _cloudinaryService.ImageDelete(additionalImage.ImageUrl);
+                    await _productImageService.RemoveAsync(additionalImage.Id);
+                }
+            }
+
+            if (vm.AdditionalImages != null)
+            {
+                foreach (var image in vm.AdditionalImages)
+                {
+                    var newUrl = await _cloudinaryService.ImageCreateAsync(image);
+                    await _productImageService.CreateAsync(new ProductImageCreateViewModel { ImageUrl = newUrl, ProductId = product.Id });
+
+                }
+
+            }
+            
+            var resultProduct = await _repository.UpdateAsync(product);
             return new ResultViewModel<ProductViewModel>() { Success = true, Data = _mapper.Map<ProductViewModel>(result) };
         }
 
 
         public override async Task<ResultViewModel<ProductViewModel>> CreateAsync(ProductCreateViewModel createViewModel)
         {
+            if (!(createViewModel.Rating <= 5 && createViewModel.Rating >= 0))
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "Rating must be between 0 and 5" };
+
             var result = _validate(createViewModel.MainPrice);
             if (result != null) return result;
 
@@ -145,11 +230,22 @@ namespace MiniMvcProject.Application.Services.Implementations
             result = _validate(createViewModel.StockAmount);
             if (result != null) return result;
 
-            result = _validate(createViewModel.Rating);
-            if (result != null) return result;
+
+            var createdProductResult = await base.CreateAsync(createViewModel);
 
 
-            return await base.CreateAsync(createViewModel);
+            createViewModel.MainImageUrl = await _cloudinaryService.ImageCreateAsync(createViewModel.MainImage);
+            createViewModel.SecondaryImageUrl = await _cloudinaryService.ImageCreateAsync(createViewModel.HoverImage);
+            foreach (var img in createViewModel.AdditionalImages)
+            {
+                var addUrl = await _cloudinaryService.ImageCreateAsync(img);
+                createViewModel.additonalImageUrls.Add(addUrl);
+                await _productImageService.CreateAsync(new ProductImageCreateViewModel { ImageUrl = addUrl, ProductId = createdProductResult.Data.Id });
+
+            }
+            await _productImageService.CreateAsync(new ProductImageCreateViewModel { ImageUrl = createViewModel.MainImageUrl, IsMain = true, ProductId = createdProductResult.Data.Id });
+            await _productImageService.CreateAsync(new ProductImageCreateViewModel { ImageUrl = createViewModel.SecondaryImageUrl, IsSecondary = true, ProductId = createdProductResult.Data.Id });
+            return createdProductResult;
         }
 
 

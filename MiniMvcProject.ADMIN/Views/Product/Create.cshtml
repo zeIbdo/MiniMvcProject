@@ -14,47 +14,47 @@
 
                 <div class="form-group">
                     <label>Brand</label>
-                    <input asp-for="Brand" class="form-control" placeholder="parent id">
+                    <input asp-for="Brand" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Code</label>
-                    <input asp-for="Code" class="form-control" placeholder="parent id">
+                    <input asp-for="Code" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Description</label>
-                    <input asp-for="Description" class="form-control" placeholder="parent id">
+                    <input asp-for="Description" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Main Price</label>
-                    <input asp-for="MainPrice" class="form-control" placeholder="parent id">
+                    <input asp-for="MainPrice" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Discount Price</label>
-                    <input asp-for="DiscountPrice" class="form-control" placeholder="parent id">
+                    <input asp-for="DiscountPrice" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Stock Amount</label>
-                    <input asp-for="StockAmount" class="form-control" placeholder="parent id">
+                    <input asp-for="StockAmount" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Reward Points</label>
-                    <input asp-for="RewardPoints" class="form-control" placeholder="parent id">
+                    <input asp-for="RewardPoints" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>Rating</label>
-                    <input asp-for="Rating" class="form-control" placeholder="parent id">
+                    <input asp-for="Rating" class="form-control" >
                 </div>
 
                 <div class="form-group">
                     <label>In Stock</label>
-                    <input asp-for="InStock" class="form-control" placeholder="parent id">
+                    <input asp-for="InStock" class="form-control" >
                 </div>
 
                 <div class="form-group">
@@ -67,6 +67,20 @@
                     <select asp-items="Model.Tags" asp-for="TagIds" class="form-control" placeholder="Tag"></select>
                 </div>
 
+                <div class="form-group">
+                    <label>Main Image</label>
+                    <input asp-for="MainImage" class="form-control" >
+                </div>
+
+                <div class="form-group">
+                    <label>Hover Image</label>
+                    <input asp-for="HoverImage" class="form-control" >
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Images</label>
+                    <input asp-for="AdditionalImages" class="form-control" >
+                </div>
 
                 <button type="submit" class="btn btn-primary mr-2">Create</button>
                 <a asp-controller="product" asp-action="index" class="btn btn-light">Cancel</a>

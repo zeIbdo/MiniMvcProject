@@ -43,7 +43,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             return url;
         }
 
-        public  bool ImageDeleteAsync(string fileName)
+        public  bool ImageDelete(string fileName)
         {
             var url = GetPublicIdFromUrl(fileName);
             var deletionParams = new DeletionParams(url)

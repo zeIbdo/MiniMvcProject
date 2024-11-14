@@ -81,7 +81,7 @@ namespace MiniMvcProject.Application.Services.Implementations.Generic
             var result = await _repository.GetAsync(predicate,include,enableTracking:false);
 
             if(result == null)
-                return new ResultViewModel<TUpVm> { Success = false,Message="NotFound" };
+                return new ResultViewModel<TUpVm> { Success = false,Message="Not Found" };
 
             return new ResultViewModel<TUpVm> {Data=_mapper.Map<TUpVm>(result) };
         }

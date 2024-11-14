@@ -5,6 +5,7 @@ using MiniMvcProject.Application.ViewModels.ProductViewModels;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -24,7 +25,7 @@ namespace MiniMvcProject.ADMIN.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var vm = await _productService.GetProductCreateViewModelAsync(new ProductCreateViewModel { Brand = null!, Code = null!, Description = null!, Name=null! });
+            var vm = await _productService.GetProductCreateViewModelAsync(new ProductCreateViewModel { Brand = null!, Code = null!, Description = null!, Name=null!,AdditionalImages=null!,HoverImage=null!,MainImage=null! });
             return View(vm);
         }
 
@@ -61,7 +62,13 @@ namespace MiniMvcProject.ADMIN.Controllers
                 var newVm = (await _productService.GetProductUpdateViewModelAsync(vm.Id)).Data;
                 return View(newVm);
             }
-            await _productService.UpdateAsync(vm);
+            var result = await _productService.UpdateAsync(vm);
+            if (result.Success == false)
+            {
+                ModelState.AddModelError("", result.Message);
+                var newVm = (await _productService.GetProductUpdateViewModelAsync(vm.Id)).Data;
+                return View(newVm);
+            }
             return RedirectToAction(nameof(Index));
         }
 

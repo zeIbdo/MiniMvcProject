@@ -82,7 +82,7 @@ namespace MiniMvcProject.Application.Profiles
                 .ReverseMap();
             CreateMap<Product, ProductUpdateViewModel>()
                 //.ForMember(dest => dest.OldTagIds, opt => opt.MapFrom(src => src.ProductTags.Select(pt => pt.TagId).ToList()))
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages))
+                //.ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages))
                 .ReverseMap();
 
             CreateMap<BasketItem, BasketItemViewModel>()
@@ -106,11 +106,21 @@ namespace MiniMvcProject.Application.Profiles
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ReverseMap();
 
+            CreateMap<ProductUpdateViewModel,ProductViewModel>().ReverseMap();
 
 
             CreateMap<Paginate<Category>, List<CategoryViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
+            CreateMap<Paginate<Service>, List<ServiceViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<ServiceViewModel>(item)).ToList());
+            CreateMap<Paginate<Setting>, List<SettingViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SettingViewModel>(item)).ToList());
+            CreateMap<Paginate<Slider>, List<SliderViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SliderViewModel>(item)).ToList());
             CreateMap<Paginate<Tag>, List<TagViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<TagViewModel>(item)).ToList());

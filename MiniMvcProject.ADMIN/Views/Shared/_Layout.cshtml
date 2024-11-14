@@ -214,6 +214,33 @@
                             </ul>
                         </div>
                     </li>
+
+                    <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="mdi mdi-circle-outline menu-icon"></i>
+                        <span class="menu-title">Slider</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" asp-controller="slider" asp-action="index">Slider list</a></li>
+                            <li class="nav-item"> <a class="nav-link" asp-controller="slider" asp-action="create">Create Slider</a></li>
+                        </ul>
+                    </div>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="mdi mdi-circle-outline menu-icon"></i>
+                        <span class="menu-title">Setting</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" asp-controller="setting" asp-action="index">Setting list</a></li>
+                            <li class="nav-item"> <a class="nav-link" asp-controller="setting" asp-action="create">Create Setting</a></li>
+                        </ul>
+                    </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pages/forms/basic_elements.html">
                             <i class="mdi mdi-view-headline menu-icon"></i>
@@ -289,6 +316,7 @@
     <script src="~/js/data-table.js"></script>
     <script src="~/js/jquery.dataTables.js"></script>
     <script src="~/js/dataTables.bootstrap4.js"></script>
+    <script src="~/js/main.js"></script>
     <!-- End custom js for this page-->
     <script src="~/js/jquery.cookie.js" type="text/javascript"></script>
 </body>
