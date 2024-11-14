@@ -19,6 +19,7 @@ namespace MiniMvcProject.Application.ViewModels.ProductViewModels
         public int Rating { get; set; }
         public bool IsDeleted { get; set; }
         public int CategoryId { get; set; }
+        public List<SelectListItem> Categories { get; set; } = new();
         public List<IFormFile>? Images { get; set; }
         public List<int>? OldTagIds { get; set; }
         public List<SelectListItem>? OldTags { get; set; }

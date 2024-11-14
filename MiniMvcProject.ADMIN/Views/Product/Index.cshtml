@@ -1,0 +1,54 @@
+﻿@model List<ProductViewModel>
+
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Products</h4>
+                <a asp-controller="product" asp-action="create" class="btn btn-primary">Create Product</a>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Main Image</th>
+                                <th>Name</th>
+                                <th>Main Price</th>
+                                <th>In Stock</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    @{
+                                    if (@item.Images!.FirstOrDefault(x => x.IsMain == true) != null)
+                                    {                                        
+                                    <td> <img src=" @item.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" style="height:150px; width:115px; border-radius:0px" /></td>
+                                    } 
+                                    else{
+                                        <td>No Image</td>
+                                    }
+                                    }
+    
+                                    <td>@item.Name</td>
+                                    <td>@item.MainPrice</td>
+                                    <td>@item.InStock</td>
+                                    <td>@item.Category!.Name</td>
+                                    <td>
+                                        <a class="btn btn-warning" asp-controller="product" asp-action="update" asp-route-id="@item.Id">Update</a>
+                                        <a class="btn btn-danger" asp-controller="product" asp-action="delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

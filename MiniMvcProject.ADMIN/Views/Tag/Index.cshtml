@@ -1,4 +1,4 @@
-﻿@model List<TagViewModel>
+﻿@model IEnumerable<TagViewModel>
 
 
 <div class="row">
@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Tags</h4>
-                <a asp-controller="category" asp-action="create" class="btn btn-primary">Create Tag</a>
+                <a asp-controller="tag" asp-action="create" class="btn btn-primary">Create Tag</a>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>

@@ -6,7 +6,7 @@ namespace MiniMvcProject.Application.ViewModels.ProductImageViewModels
     {
         public int ProductId { get; set; }
         public required string ImageUrl { get; set; }
-        public bool IsMain { get; set; }
-        public bool IsSecondary { get; set; }
+        public bool IsMain { get; set; } = false;
+        public bool IsSecondary { get; set; } = false;
     }
 }

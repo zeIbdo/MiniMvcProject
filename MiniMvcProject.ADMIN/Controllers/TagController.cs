@@ -4,7 +4,7 @@ using MiniMvcProject.Application.ViewModels.TagViewModels;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
-    [ValidateAntiForgeryToken]
+    [AutoValidateAntiforgeryToken]
     public class TagController : Controller
     {
         private readonly ITagService _tagService;
@@ -18,7 +18,7 @@ namespace MiniMvcProject.ADMIN.Controllers
         {
             var tags = await _tagService.GetListAsync();
 
-            return View(tags);
+            return View(tags.Data);
         }
 
         [HttpGet]
@@ -36,6 +36,41 @@ namespace MiniMvcProject.ADMIN.Controllers
             }
 
             await _tagService.CreateAsync(vm);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var result = await _tagService.GetUpdateViewModel(x => x.Id == id);
+
+            if (!result.Success)
+                return NotFound();
+
+            return View(result.Data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(TagUpdateViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                var newVm = await _tagService.GetUpdateViewModel(x => x.Id == vm.Id);
+                return View(newVm);
+            }
+
+            await _tagService.UpdateAsync(vm);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _tagService.RemoveAsync(id);
+
+            if (!result.Success)
+                return NotFound(result.Message);
+
             return RedirectToAction(nameof(Index));
         }
     }
