@@ -57,7 +57,7 @@
                 </div>
                 <div class="newsletter-form mb--30">
                     <form method="post" asp-action="subscribeto" asp-controller="Home">
-                        <input asp-for="subscriptionCreateViewModel.Email" type="email" class="form-control" placeholder="Enter Your Email Address Here...">
+                        <input name="Email" type="email" class="form-control" placeholder="Enter Your Email Address Here...">
                         <button type="submit">Subscribe</button>
                     </form>
                     @{

@@ -112,6 +112,9 @@ namespace MiniMvcProject.Application.Profiles
             CreateMap<Paginate<Category>, List<CategoryViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
+            CreateMap<Paginate<Subscription>, List<SubscriptionViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SubscriptionViewModel>(item)).ToList());
             CreateMap<Paginate<Service>, List<ServiceViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<ServiceViewModel>(item)).ToList());

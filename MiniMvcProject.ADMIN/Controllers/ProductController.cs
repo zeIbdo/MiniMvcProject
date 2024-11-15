@@ -44,6 +44,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             if (result.Success == false)
             {
                 ModelState.AddModelError("",result.Message);
+                var newVm = await _productService.GetProductCreateViewModelAsync(model);
                 return View(model);
             }
 

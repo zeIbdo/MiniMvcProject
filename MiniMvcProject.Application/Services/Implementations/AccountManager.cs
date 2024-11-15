@@ -42,6 +42,9 @@ namespace MiniMvcProject.Application.Services.Implementations
                 return false;
             }
 
+            if(user.LockoutEnabled)
+                return false;
+
             var result = await _signInManager.PasswordSignInAsync(user, vm.Password, vm.RememberMe,true);
             if (!result.Succeeded)
             {

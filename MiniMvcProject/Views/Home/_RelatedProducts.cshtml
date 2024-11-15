@@ -17,10 +17,10 @@
             </div>
             <div class="product-card--body">
                 <div class="card-image">
-                    <img src="@product.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" alt="">
+                    <img src="@product.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" alt="" style="height:300px; width:300px">
                     <div class="hover-contents">
                         <a href="product-details.html" class="hover-image">
-                            <img src="@product.Images!.FirstOrDefault(x=>x.IsSecondary==true)!.ImageUrl" alt="">
+                            <img src="@product.Images!.FirstOrDefault(x=>x.IsSecondary==true)!.ImageUrl" alt="" style="height:300px; width:300px">
                         </a>
                         <div class="hover-btns">
                             <a data-product-id="@product.Id" onclick="addToBasket(@product.Id)" class="single-btn">

@@ -54,7 +54,7 @@ public class UserController : Controller
 
         if (user == null) return NotFound();
 
-        return View(new AppUserStatusChangeViewModel { AppUserId=user.Id,LockoutEnds=(DateTimeOffset)user.LockoutEnd });
+        return View(new AppUserStatusChangeViewModel { AppUserId=user.Id,OnLockout=user.LockoutEnabled });
     }
 
     [HttpPost]
@@ -64,11 +64,11 @@ public class UserController : Controller
             return View(vm);
         var result = await _userService.ChangeStatus(vm);
         if(result == null) return NotFound();
-        if(result==false)
-        {
-            ModelState.AddModelError("", "invalid date");
-            return View(vm);
-        }
+        //if(result==false)
+        //{
+        //    ModelState.AddModelError("", "invalid date");
+        //    return View(vm);
+        //}
 
         return RedirectToAction(nameof(Index));
     }

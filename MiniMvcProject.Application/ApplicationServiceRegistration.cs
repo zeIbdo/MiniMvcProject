@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿    using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.Services.Abstractions.Generic;
@@ -30,6 +30,7 @@ namespace MiniMvcProject.Application
             services.AddScoped<IAccountService, AccountManager>();
             services.AddScoped<IBasketService, BasketManager>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailManager>();
             services.AddIdentity<AppUser,IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;

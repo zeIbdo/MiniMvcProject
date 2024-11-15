@@ -10,8 +10,7 @@
 
                 
                 <label for="Role">When Lockout ends</label>
-                <input asp-for="LockoutEnds" type="datetime-local" class="form-control">
-                </input>
+                <input asp-for="OnLockout" type="checkbox" class="form-control">
                 <input asp-for="AppUserId" type="hidden" value="@Model.AppUserId"/>
                 <button type="submit" class="btn btn-primary mr-2">Create</button>
                 <a asp-controller="category" asp-action="index" class="btn btn-light">Cancel</a>

@@ -17,7 +17,7 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
 
     public override async Task<ResultViewModel<CategoryViewModel>> CreateAsync(CategoryCreateViewModel createViewModel)
     {
-        var validationResult = _validateParentId(createViewModel.ParentId);
+        var validationResult = await _validateParentId(createViewModel.ParentId);
         if (validationResult != null)
         {
             return validationResult;
@@ -28,7 +28,7 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
 
     public override async Task<ResultViewModel<CategoryViewModel>> UpdateAsync(CategoryUpdateViewModel vm)
     {
-        var validationResult = _validateParentId(vm.ParentId);
+        var validationResult = await _validateParentId(vm.ParentId);
         if (validationResult != null)
         {
             return validationResult; 
@@ -37,14 +37,23 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
         return await base.UpdateAsync(vm);
     }
 
-    private ResultViewModel<CategoryViewModel>? _validateParentId(int? parentId)
+    private async Task<ResultViewModel<CategoryViewModel>?> _validateParentId(int? parentId)
     {
-        if (parentId < 0)
+        if (parentId <= 0)
         {
             return new ResultViewModel<CategoryViewModel>
             {
                 Success = false,
-                Message = "Parent ID cannot be a negative number."
+                Message = "Parent ID is invalid."
+            };
+        }
+        var existCategory = await GetAsync(x=>x.Id == parentId,enableTracking:false);
+        if(existCategory is null)
+        {
+            return new ResultViewModel<CategoryViewModel>
+            {
+                Success = false,
+                Message = "There is no Category with that ID."
             };
         }
         return null; 
