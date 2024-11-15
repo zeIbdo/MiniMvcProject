@@ -6,6 +6,5 @@ namespace MiniMvcProject.Application.ViewModels.SubscriptionViewModels
     {
         public int Id { get; set; }
         public string? Email { get; set; }
-        public bool IsActive { get; set; }
     }
 }

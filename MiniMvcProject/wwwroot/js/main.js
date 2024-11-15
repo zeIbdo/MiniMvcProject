@@ -14,7 +14,7 @@ async function addToBasket(id) {
         const response = await fetch(`/Home/AddToBasket?productId=${id}`);
         const html = await response.text(); 
 
-        const cartDropdown = document.querySelector('.cart-dropdown-block');
+        const cartDropdown = document.querySelector('.cart-block');
         cartDropdown.innerHTML = ""; 
         cartDropdown.innerHTML = html; 
     }
@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!response.ok) throw new Error('Failed to load basket');
 
         const html = await response.text();
-        const cartDropdown = document.querySelector('.cart-dropdown-block');
+        const cartDropdown = document.querySelector('.cart-block');
+        const cartCount = document.querySelector('#basketCount');
+        const cartPrice = document.querySelector('#basketPrice');
         cartDropdown.innerHTML = html; 
     } catch (error) {
         console.error('Error loading basket:', error);

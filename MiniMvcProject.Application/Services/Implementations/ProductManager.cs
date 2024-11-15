@@ -41,7 +41,7 @@ namespace MiniMvcProject.Application.Services.Implementations
 
             foreach (var category in categoryList.Data ?? new List<CategoryViewModel>())
             {
-                categorySelectListItems.Add(new SelectListItem(category.Name, category.Id.ToString()));
+                categorySelectListItems.Add(new SelectListItem(category.Name, category.Id.ToString(),false));
             }
 
             var tagList = await _tagService.GetListAsync();
@@ -230,6 +230,8 @@ namespace MiniMvcProject.Application.Services.Implementations
             result = _validate(createViewModel.StockAmount);
             if (result != null) return result;
 
+            if((await _categoryService.GetAsync(x=>x.Id== createViewModel.CategoryId,enableTracking:false)).Data==null)
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "Invalid category id" };
 
             var createdProductResult = await base.CreateAsync(createViewModel);
 

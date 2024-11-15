@@ -6,6 +6,7 @@ using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels;
 using MiniMvcProject.Application.ViewModels.AppUserViewModels;
 using MiniMvcProject.Domain.Entities;
+using MiniMvcProject.Domain.Enums;
 using Newtonsoft.Json;
 
 namespace MiniMvcProject.Application.Services.Implementations
@@ -63,8 +64,10 @@ namespace MiniMvcProject.Application.Services.Implementations
             }
 
             var newUser = _mapper.Map<AppUser>(vm);
+            newUser.LockoutEnabled=true;
 
             var result = await _userManager.CreateAsync(newUser, vm.Password);
+            await _userManager.AddToRoleAsync(newUser,RoleType.Member.ToString());
 
             if (!result.Succeeded)
             {

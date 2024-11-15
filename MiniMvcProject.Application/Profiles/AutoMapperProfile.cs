@@ -86,7 +86,7 @@ namespace MiniMvcProject.Application.Profiles
                 .ReverseMap();
 
             CreateMap<BasketItem, BasketItemViewModel>()
-                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
+                //.ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
                 .ForMember(dest => dest.AppUserName, opt => opt.MapFrom(src => src.AppUserId))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
@@ -133,8 +133,8 @@ namespace MiniMvcProject.Application.Profiles
 
             CreateMap<BasketItemViewModel, BasketViewModel>()
            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-           .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.MainPrice))
-           .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+           //.ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.MainPrice))
+           //.ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
            .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count)).ReverseMap();
 
 

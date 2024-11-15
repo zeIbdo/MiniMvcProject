@@ -1,4 +1,6 @@
-﻿namespace MiniMvcProject.Application.UI.ViewModels
+﻿using MiniMvcProject.Application.ViewModels.SubscriptionViewModels;
+
+namespace MiniMvcProject.Application.UI.ViewModels
 {
     public class FooterViewModel
     {
@@ -10,5 +12,6 @@
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? BottomText { get; set; }
+        public SubscriptionCreateViewModel subscriptionCreateViewModel { get; set; } = null!;
     }
 }

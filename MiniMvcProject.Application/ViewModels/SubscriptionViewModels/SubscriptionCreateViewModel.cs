@@ -5,6 +5,5 @@ namespace MiniMvcProject.Application.ViewModels.SubscriptionViewModels
     public class SubscriptionCreateViewModel : IViewModel
     {
         public required string Email { get; set; }
-        public bool IsActive { get; set; }
     }
 }

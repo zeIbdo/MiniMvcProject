@@ -25,7 +25,7 @@
                                     <td>@item.Email</td>
                                     <td>
                                         <a class="btn btn-warning" asp-controller="user" asp-action="assignRole" asp-route-id="@item.Id">Change Role</a>
-                                        <a class="btn btn-danger" asp-controller="user" asp-action="delete" asp-route-id="@item.Id">Change Status</a>
+                                        <a class="btn btn-danger" asp-controller="user" asp-action="toggleuser" asp-route-id="@item.Id">Change Status</a>
                                     </td>
                                 </tr>
                             }

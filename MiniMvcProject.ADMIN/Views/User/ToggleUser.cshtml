@@ -1,0 +1,21 @@
+﻿@model AppUserStatusChangeViewModel
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Change Status</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All">
+                </div>
+
+                
+                <label for="Role">When Lockout ends</label>
+                <input asp-for="LockoutEnds" type="datetime-local" class="form-control">
+                </input>
+                <input asp-for="AppUserId" type="hidden" value="@Model.AppUserId"/>
+                <button type="submit" class="btn btn-primary mr-2">Create</button>
+                <a asp-controller="category" asp-action="index" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

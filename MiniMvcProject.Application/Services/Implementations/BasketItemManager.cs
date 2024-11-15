@@ -77,7 +77,7 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
                     dtos.Remove(dto);
                     continue;
                 }
-                dto.Product = product.Data;
+                //dto.Product = product.Data;
             }
 
 

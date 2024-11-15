@@ -186,26 +186,26 @@
                                 {
                                     if (category.HasSubCategories)
                                     {
-                                                <li class="cat-item has-children">
-                                                    <a href="#">@category.Name</a>
-                                                    <ul class="sub-menu">
+                                        <li class="cat-item has-children">
+                                            <a href="#">@category.Name</a>
+                                            <ul class="sub-menu">
                                                 @foreach (var subCategory in category.SubCategories)
                                                 {
-                                                                <li><a href="#">@subCategory.Name</a></li>
+                                                    <li><a href="#">@subCategory.Name</a></li>
 
                                                 }
-                                                    </ul>
-                                                </li>
+                                            </ul>
+                                        </li>
                                     }
                                     else
                                     {
                                         if (category.ParentId == null)
                                         {
 
-                                                    <li class="cat-item">
-                                                     <a href="#">@category.Name</a>
+                                            <li class="cat-item">
+                                                <a href="#">@category.Name</a>
 
-                                                    </li>
+                                            </li>
                                         }
 
                                     }
@@ -227,10 +227,10 @@
                             <div class="login-block">
                                 @if (Context.User.Identity.IsAuthenticated)
                                 {
-                                        <span class="font-weight-bold">Welcome back @Context.User.Identity.Name :)</span>
+                                    <span class="font-weight-bold">Welcome back @Context.User.Identity.Name :)</span>
                                 }
                                 else
-                                {                                    
+                                {
                                     <a asp-controller="account" asp-action="login" class="font-weight-bold">Login</a> <br>
                                     <span>or</span>
 
@@ -238,22 +238,7 @@
                                 }
                             </div>
                             <div class="cart-block">
-                                <div id="basket-container" class="cart-total">
-                                    <span class="text-number">
-                                        1
-                                    </span>
-                                    <span class="text-item">
-                                        Shopping Cart
-                                    </span>
-                                    <span class="price">
-                                        £0.00
-                                        <i class="fas fa-chevron-down"></i>
-                                    </span>
-                                </div>
-                                <div class="cart-dropdown-block">
-
-    
-</div>
+                                
                             </div>
                         </div>
                     </div>

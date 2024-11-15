@@ -41,7 +41,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             {
                 var imageCheck = _validate(vm.IconImage);
                 if (imageCheck != null) return imageCheck;
-                _cloudinaryService.ImageDelete((await base.GetAsync(x => x.Id == vm.Id, enableTracking: false)).Data.IconUrl);
+                _cloudinaryService.ImageDelete((await base.GetAsync(x => x.Id == vm.Id, enableTracking: false)).Data!.IconUrl!);
                 vm.IconUrl = await _cloudinaryService.ImageCreateAsync(vm.IconImage);
             }
 

@@ -8,7 +8,7 @@ using MiniMvcProject.Domain.Entities;
 using MiniMvcProject.Domain.Enums;
 
 namespace MiniMvcProject.ADMIN.Controllers;
-
+[AutoValidateAntiforgeryToken]
 [Authorize(Roles = "Admin")]
 public class UserController : Controller
 {
@@ -31,26 +31,44 @@ public class UserController : Controller
     public async Task<IActionResult> AssignRole(string id)
     {
         var user = _userManager.Users.FirstOrDefault(u => u.Id == id);
-
+        
         if (user == null) return NotFound();
-        var roles = new List<string>();
-        roles = Enum.GetValues(typeof(RoleType))
-           .Cast<RoleType>()
-           .Select(r => r.ToString())
-           .ToList();
-        var roleItems = roles.Select(r => new SelectListItem
-        {
-            Text = r,
-            Value = r
-        }).ToList();
-        var userRole =await _userManager.GetRolesAsync(user);
-        return View(new AppUserRoleChangeViewModel { Id = id, Roles = roleItems });
+        return View(await _userService.GetRoleChangeViewModelAsync(user));
     }
 
     [HttpPost]
     public async Task<IActionResult> AssignRole(AppUserRoleChangeViewModel vm)
     {
+        if(!ModelState.IsValid) 
+            return View(vm);
+
         var result = await _userService.AssignRoleAsync(vm.Id, vm.Role);
+
+       
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> ToggleUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+
+        if (user == null) return NotFound();
+
+        return View(new AppUserStatusChangeViewModel { AppUserId=user.Id,LockoutEnds=(DateTimeOffset)user.LockoutEnd });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ToggleUser(AppUserStatusChangeViewModel vm)
+    {
+        if (!ModelState.IsValid)
+            return View(vm);
+        var result = await _userService.ChangeStatus(vm);
+        if(result == null) return NotFound();
+        if(result==false)
+        {
+            ModelState.AddModelError("", "invalid date");
+            return View(vm);
+        }
 
         return RedirectToAction(nameof(Index));
     }

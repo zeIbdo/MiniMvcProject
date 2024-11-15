@@ -4,6 +4,7 @@ using MiniMvcProject.Application.ViewModels.AppUserViewModels;
 
 namespace MiniMvcProject.ADMIN.Controllers
 {
+
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
@@ -18,7 +19,7 @@ namespace MiniMvcProject.ADMIN.Controllers
             return View();
         }
 
-
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {

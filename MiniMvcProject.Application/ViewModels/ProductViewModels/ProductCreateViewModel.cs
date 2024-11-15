@@ -17,8 +17,8 @@ namespace MiniMvcProject.Application.ViewModels.ProductViewModels
         public int StockAmount { get; set; }
         public int Rating { get; set; }
         public bool IsDeleted { get; set; }
-        public List<SelectListItem>? Categories { get; set; }
-        public int CategoryId { get; set; }
+        public  List<SelectListItem> Categories { get; set; } = new();
+        public  int CategoryId { get; set; }
         public required IFormFile MainImage { get; set; } 
         public string? MainImageUrl { get; set; }
         public string? SecondaryImageUrl { get; set; }

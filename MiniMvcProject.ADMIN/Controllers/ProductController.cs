@@ -41,6 +41,11 @@ namespace MiniMvcProject.ADMIN.Controllers
             }
 
             var result = await _productService.CreateAsync(model);
+            if (result.Success == false)
+            {
+                ModelState.AddModelError("",result.Message);
+                return View(model);
+            }
 
             return RedirectToAction(nameof(Index));
         }

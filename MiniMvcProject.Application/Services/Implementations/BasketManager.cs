@@ -50,7 +50,7 @@ namespace MiniMvcProject.Application.Services.Implementations
                 {
                     Count = 1,
                     ProductId = productId,
-                    ProductName = productResult.Data.Name,
+                    ProductName = productResult.Data!.Name!,
                     ProductPrice = productResult.Data.MainPrice,
                     //ProductImageUrl = productResult.Data.Images.FirstOrDefault(x => x.IsMain == true).ImageUrl
                 };
@@ -80,7 +80,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             else
             {
                 BasketItemCreateViewModel basketItemCreateViewModel = new BasketItemCreateViewModel { ProductId = productId, Count = 1, 
-                    AppUserName = userId };
+                    AppUserName = userId! };
                 await _basketItemService.CreateAsync(basketItemCreateViewModel);
 
             }
@@ -88,7 +88,7 @@ namespace MiniMvcProject.Application.Services.Implementations
      
         public async Task AddToBasketAsync(int productId)
         {
-            if(!_contextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            if(!_contextAccessor.HttpContext.User.Identity!.IsAuthenticated)
             {
                 await AddProductsToCookieBasketAsync(productId);
             }

@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.UI.ViewModels;
+using MiniMvcProject.Application.ViewModels.SubscriptionViewModels;
 
 namespace MiniMvcProject.MVC.Views.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {
         private readonly ISettingService _settingService;
+        //private readonly I
 
         public FooterViewComponent(ISettingService settingService)
         {
@@ -33,6 +35,7 @@ namespace MiniMvcProject.MVC.Views.ViewComponents
                 TwitterLink = resultGoogle.Data!.Value,
                 GoogleLink = resultTwitter.Data!.Value,
                 BottomText= resultBottomText.Data!.Value,
+                subscriptionCreateViewModel= new SubscriptionCreateViewModel { Email = null! }
             };
             return View(footer);
         }
