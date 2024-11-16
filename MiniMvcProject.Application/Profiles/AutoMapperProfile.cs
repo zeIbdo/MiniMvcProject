@@ -75,6 +75,7 @@ namespace MiniMvcProject.Application.Profiles
             CreateMap<Product, ProductViewModel>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages))
+                .ForMember(dest => dest.BasketItems, opt => opt.MapFrom(src => src.BasketItems))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.ProductTags.Select(x => x.Tag)))
                 .ReverseMap();
             CreateMap< ProductCreateViewModel,Product>()
@@ -112,24 +113,39 @@ namespace MiniMvcProject.Application.Profiles
             CreateMap<Paginate<Category>, List<CategoryViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<CategoryViewModel>(item)).ToList());
-            CreateMap<Paginate<Subscription>, List<SubscriptionViewModel>>()
-           .ConvertUsing((src, dest, context) =>
-               src.Items.Select(item => context.Mapper.Map<SubscriptionViewModel>(item)).ToList());
-            CreateMap<Paginate<Service>, List<ServiceViewModel>>()
-           .ConvertUsing((src, dest, context) =>
-               src.Items.Select(item => context.Mapper.Map<ServiceViewModel>(item)).ToList());
-            CreateMap<Paginate<Setting>, List<SettingViewModel>>()
-           .ConvertUsing((src, dest, context) =>
-               src.Items.Select(item => context.Mapper.Map<SettingViewModel>(item)).ToList());
+
             CreateMap<Paginate<Slider>, List<SliderViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<SliderViewModel>(item)).ToList());
+
+            CreateMap<Paginate<Service>, List<ServiceViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<ServiceViewModel>(item)).ToList());
+
+            CreateMap<Paginate<Subscription>, List<SubscriptionViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SubscriptionViewModel>(item)).ToList());
+
+            CreateMap<Paginate<Service>, List<ServiceViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<ServiceViewModel>(item)).ToList());
+
+            CreateMap<Paginate<Setting>, List<SettingViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SettingViewModel>(item)).ToList());
+
+            CreateMap<Paginate<Slider>, List<SliderViewModel>>()
+           .ConvertUsing((src, dest, context) =>
+               src.Items.Select(item => context.Mapper.Map<SliderViewModel>(item)).ToList());
+
             CreateMap<Paginate<Tag>, List<TagViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<TagViewModel>(item)).ToList());
+
             CreateMap<Paginate<BasketItem>, List<BasketItemViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<BasketItemViewModel>(item)).ToList());
+
             CreateMap<Paginate<Product>, List<ProductViewModel>>()
            .ConvertUsing((src, dest, context) =>
                src.Items.Select(item => context.Mapper.Map<ProductViewModel>(item)).ToList());

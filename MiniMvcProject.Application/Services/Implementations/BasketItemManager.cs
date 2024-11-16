@@ -62,6 +62,8 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
         return _contextAccessor.HttpContext.User.Identity?.IsAuthenticated ?? false;
     }
 
+
+
     public async Task<List<BasketItemViewModel>> GetBasketAsync(List<BasketItemViewModel> models)
     {
        
@@ -83,5 +85,14 @@ public class BasketItemManager : CrudManager<BasketItem, BasketItemViewModel, Ba
 
             return dtos;
         
+    }
+
+    public List<BasketItemViewModel> GetBasketCookies()
+    {
+        string json = _contextAccessor.HttpContext.Request.Cookies[Constants.PUSKAT_BASKET_KEY] ?? "";
+
+        var vms = JsonConvert.DeserializeObject<List<BasketItemViewModel>>(json) ?? new();
+
+        return vms;
     }
 }

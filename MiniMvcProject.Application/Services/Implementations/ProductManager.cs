@@ -14,6 +14,7 @@ using MiniMvcProject.Persistance.Repositories.Abstractions.Generic;
 
 namespace MiniMvcProject.Application.Services.Implementations
 {
+
     public class ProductManager : CrudManager<Product, ProductViewModel, ProductCreateViewModel, ProductUpdateViewModel>, IProductService
     {
         private readonly IEmailService _emailService;
@@ -139,6 +140,9 @@ namespace MiniMvcProject.Application.Services.Implementations
             result = _validate(vm.DiscountPrice);
             if (result != null) return result;
 
+            if (vm.DiscountPrice >= vm.MainPrice)
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "Discount price cannot be higher or equal to main price(If you dont want to give discount just give 0)" };
+
             result = _validate(vm.RewardPoints);
             if (result != null) return result;
 
@@ -228,6 +232,9 @@ namespace MiniMvcProject.Application.Services.Implementations
             result = _validate(createViewModel.DiscountPrice);
             if (result != null) return result;
 
+            if(createViewModel.DiscountPrice>=createViewModel.MainPrice)
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "Discount price cannot be higher or equal to main price(If you dont want to give discount just give 0)" };
+
             result = _validate(createViewModel.RewardPoints);
             if (result != null) return result;
 
@@ -282,6 +289,8 @@ namespace MiniMvcProject.Application.Services.Implementations
             }
             return null;
         }
+
+
         private ResultViewModel<ProductViewModel>? _validate(decimal val)
         {
             if (val < 0)
@@ -294,6 +303,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             }
             return null;
         }
+
 
         public async Task<ResultViewModel<ProductViewModel>> SoftDeleteProductAsync(int id)
         {
@@ -319,6 +329,12 @@ namespace MiniMvcProject.Application.Services.Implementations
             };
         }
 
+        public async Task IncrementViewCountAsync(int id)
+        {
+            var product = await _repository.GetAsync(id);
+            product!.ViewCount++;
+            await _repository.UpdateAsync(product);
+        }
     }
 
 

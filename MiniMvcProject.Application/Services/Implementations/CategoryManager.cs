@@ -39,7 +39,7 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
 
     private async Task<ResultViewModel<CategoryViewModel>?> _validateParentId(int? parentId)
     {
-        if (parentId <= 0)
+        if (parentId < 0)
         {
             return new ResultViewModel<CategoryViewModel>
             {

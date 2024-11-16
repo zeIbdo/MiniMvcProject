@@ -10,5 +10,6 @@ namespace MiniMvcProject.Application.Services.Abstractions
         Task<ProductCreateViewModel> GetProductCreateViewModelAsync(ProductCreateViewModel productCreateViewModel);
         Task<ResultViewModel<ProductUpdateViewModel>> GetProductUpdateViewModelAsync(int id);
         Task<ResultViewModel<ProductViewModel>> SoftDeleteProductAsync(int id);     
+        Task IncrementViewCountAsync(int id);
     }
 }

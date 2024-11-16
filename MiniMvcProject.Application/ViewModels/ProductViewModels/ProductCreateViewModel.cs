@@ -11,6 +11,7 @@ namespace MiniMvcProject.Application.ViewModels.ProductViewModels
         public decimal MainPrice { get; set; }
         public decimal DiscountPrice { get; set; }
         public bool InStock { get; set; }
+        public int ViewCount { get; set; }
         public required string Brand { get; set; }
         public required string Code { get; set; }
         public int RewardPoints { get; set; }

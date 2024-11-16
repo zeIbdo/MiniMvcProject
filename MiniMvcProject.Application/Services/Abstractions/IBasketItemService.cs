@@ -8,4 +8,6 @@ public interface IBasketItemService : ICrudService<BasketItem, BasketItemViewMod
 {
     Task<List<BasketItemViewModel>> GetBasketAsync();
     Task<List<BasketItemViewModel>> GetBasketAsync(List<BasketItemViewModel> models);
+    List<BasketItemViewModel> GetBasketCookies();
+
 }

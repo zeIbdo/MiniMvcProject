@@ -1,6 +1,4 @@
-﻿
-
-@model List<BasketItemViewModel>
+﻿@model List<BasketItemViewModel>
 @inject IProductService service
 
 <div id="basket-container" class="cart-total">
@@ -13,7 +11,7 @@
     <span class="price" id="basketPrice">
         @{
             decimal price = 0;
-            foreach(var item in Model)
+            foreach (var item in Model)
             {
                 var product = await service.GetAsync(item.ProductId);
                 price += item.Count * product.Data!.MainPrice;
@@ -25,37 +23,46 @@
 </div>
 <div class="cart-dropdown-block">
 
-<div class=" single-cart-block ">
-    <div class="btn-block">
-        <a href="cart.html" class="btn">
-            View Cart <i class="fas fa-chevron-right"></i>
-        </a>
-        <a href="checkout.html" class="btn btn--primary">
-            Check Out <i class="fas fa-chevron-right"></i>
-        </a>
-    </div>
-</div>
-@foreach (var basket in Model)
-{
-    
-        var product =await service.GetAsync(x => x.Id == basket.ProductId, include: x => x.Include(x => x.ProductImages));
-
-    
     <div class=" single-cart-block ">
-        <div class="cart-product">
-            <a href="product-details.html" class="image">
-                <img src="@product.Data!.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" alt="" style="height:100px; width:100px">
+        <div class="btn-block">
+            <a asp-action="Cart" asp-controller="home" class="btn">
+                View Cart <i class="fas fa-chevron-right"></i>
             </a>
-            <div class="content">
-                <h3 class="title">
-                    <a href="product-details.html">
-                        @product.Data.Name
-                    </a>
-                </h3>
-                <p class="price"><span class="qty">@basket.Count ×</span> @product.Data.MainPrice</p>
-                <button class="cross-btn"><i class="fas fa-times"></i></button>
-            </div>
+            <a href="checkout.html" class="btn btn--primary">
+                Check Out <i class="fas fa-chevron-right"></i>
+            </a>
         </div>
     </div>
-}
+    @foreach (var basket in Model)
+    {
+
+        var product = await service.GetAsync(x => x.Id == basket.ProductId, include: x => x.Include(x => x.ProductImages));
+
+
+        <div class=" single-cart-block ">
+            <div class="cart-product">
+                <a href="product-details.html" class="image">
+                    <img src="@product.Data!.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" alt="" style="height:100px; width:100px">
+                </a>
+                <div class="content">
+                    <h3 class="title">
+                        <a href="product-details.html">
+                            @product.Data.Name
+                        </a>
+                    </h3>
+                    @if (product.Data.DiscountPrice != 0)
+                    {
+
+                        <p class="price"><span class="qty">@basket.Count ×</span> @product.Data.DiscountPrice</p>
+                    }
+                    else
+                    {
+
+                        <p class="price"><span class="qty">@basket.Count ×</span> @product.Data.MainPrice</p>
+                    }
+                    <button class="cross-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+        </div>
+    }
 </div>

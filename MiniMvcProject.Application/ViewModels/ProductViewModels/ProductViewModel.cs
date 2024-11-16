@@ -1,4 +1,5 @@
-﻿using MiniMvcProject.Application.ViewModels.CategoryViewModels;
+﻿using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
+using MiniMvcProject.Application.ViewModels.CategoryViewModels;
 using MiniMvcProject.Application.ViewModels.Generic;
 using MiniMvcProject.Application.ViewModels.ProductImageViewModels;
 using MiniMvcProject.Application.ViewModels.TagViewModels;
@@ -19,9 +20,11 @@ namespace MiniMvcProject.Application.ViewModels.ProductViewModels
         public int StockAmount { get; set; }
         public int Rating { get; set; }
         public bool IsDeleted { get; set; }
+        public int ViewCount { get; set; }
         public List<ProductImageViewModel>? Images { get; set; }
         public CategoryViewModel? Category { get; set; }
         public List<TagViewModel>? Tags { get; set; }
+        public List<BasketItemViewModel>? BasketItems { get; set; }
 
     }
 }

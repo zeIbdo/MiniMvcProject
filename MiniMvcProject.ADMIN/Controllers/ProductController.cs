@@ -19,7 +19,7 @@ namespace MiniMvcProject.ADMIN.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _productService.GetListAsync(include:x=>x.Include(x=>x.Category).Include(x => x.ProductImages));
+            var result = await _productService.GetListAsync(include:x=>x.Include(x=>x.Category));
 
             return View(result.Data);
         }

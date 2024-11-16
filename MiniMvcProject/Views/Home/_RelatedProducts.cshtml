@@ -1,6 +1,6 @@
 ﻿@model List<ProductViewModel>
 
-@foreach (var product in Model )
+@foreach (var product in Model)
 {
 
     <div class="single-slide">
@@ -24,7 +24,7 @@
                         </a>
                         <div class="hover-btns">
                             <a data-product-id="@product.Id" onclick="addToBasket(@product.Id)" class="single-btn">
-                                <i  class="fas fa-shopping-basket"></i>
+                                <i class="fas fa-shopping-basket"></i>
                             </a>
                             <a href="wishlist.html" class="single-btn">
                                 <i class="fas fa-heart"></i>
@@ -32,16 +32,29 @@
                             <a href="compare.html" class="single-btn">
                                 <i class="fas fa-random"></i>
                             </a>
-                            <a href="#" data-toggle="modal" data-target="#quickModal"
-                            class="single-btn">
+                            <a asp-action = "detail" asp-controller="home" asp-route-id = "@product.Id" data-toggle="modal" data-target="#quickModal"
+                               class="single-btn">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="price-block">
-                    <span class="price">@product.MainPrice</span>
-                    <del class="price-old">@product.DiscountPrice</del>
+                    @if (product.DiscountPrice != 0)
+                    {
+
+                        var discount = Math.Round(((product.MainPrice - product.DiscountPrice) / product.MainPrice), 1)*100;
+                        <span class="price">@product.MainPrice</span>
+                        <del class="price-old">@product.DiscountPrice</del>
+                        <span class="price-discount">@discount%</span>
+
+
+                    }
+                    else
+                    {
+                        <span class="price">@product.MainPrice</span>
+
+                    }
                 </div>
             </div>
         </div>
