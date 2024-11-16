@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.ViewModels.AppUserViewModels;
+using MiniMvcProject.Domain.Entities;
 
 namespace MiniMvcProject.MVC.Controllers
 {
@@ -16,12 +17,14 @@ namespace MiniMvcProject.MVC.Controllers
 
         public IActionResult Register()
         {
+           
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel vm)
         {
+
             var result = await _accountService.RegisterAsync(vm, ModelState);
 
             if (result != true)
@@ -40,6 +43,8 @@ namespace MiniMvcProject.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
+   
+
             var result = await _accountService.LoginAsync(vm, ModelState);
             
             if (result != true)
@@ -48,6 +53,20 @@ namespace MiniMvcProject.MVC.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            if (!HttpContext.User.Identity.IsAuthenticated)
+                return NotFound();
+            var result = await _accountService.SignOutAsync();
+
+
+            if (result is false)
+                return BadRequest();
+
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }

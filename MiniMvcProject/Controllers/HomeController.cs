@@ -5,6 +5,7 @@ using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.UI.ViewModels;
 using MiniMvcProject.Application.Utilities;
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
+using MiniMvcProject.Application.ViewModels.ProductViewModels;
 using MiniMvcProject.Application.ViewModels.SubscriptionViewModels;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -44,7 +45,15 @@ namespace MiniMvcProject.Controllers
             var products = await _productService.GetListAsync(include: x => x.Include(x => x.ProductImages).Include(x => x.ProductImages).Include(x => x.BasketItems), orderBy: x => x.OrderByDescending(x => x.BasketItems.Sum(x => x.Count)), enableTracking: false);
             return View(new HomeViewModel { TopThreeCategories = resultCategories.Data!.ToList(), Services = services.Data!.ToList(), Sliders = sliders.Data!.ToList(), Products = products.Data!.ToList() });
         }
-
+        [HttpGet]
+        public async Task<IActionResult> ProductsForSearch(string query)
+        {
+            var products = await _productService.GetListAsync(enableTracking: false);
+            var filteredProducts = products.Data!
+                .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            return PartialView("_ProductDropdown", filteredProducts);
+        }
 
         public async Task<IActionResult> RelatedProducts(int categoryId)
         {
@@ -71,6 +80,22 @@ namespace MiniMvcProject.Controllers
                 return PartialView("_BasketDbPartial", basketDbItems);
             }
         }
+        public async Task<IActionResult> Decrease(int productId)
+        {
+            if (HttpContext.User.Identity!.IsAuthenticated)
+            {
+                await _basketService.DecreaseProductsToDbBasketAsync(productId);
+                var basketDbItems = await _basketItemService.GetBasketAsync();
+                return PartialView("_BasketDbPartial", basketDbItems);
+
+            }
+            else
+            {
+                var vms = await _basketService.DecreaseProductsToCookieBasketAsync(productId);
+                var basketDbItems = await _basketItemService.GetBasketAsync(vms);
+                return PartialView("_BasketDbPartial", basketDbItems);
+            }
+        }
 
 
         [HttpGet]
@@ -83,7 +108,7 @@ namespace MiniMvcProject.Controllers
 
             else
                 basketItems = _basketItemService.GetBasketCookies();
-                return PartialView("_BasketDbPartial", basketItems);
+            return PartialView("_BasketDbPartial", basketItems);
 
         }
 
@@ -116,13 +141,15 @@ namespace MiniMvcProject.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _productService.GetAsync(x => x.Id == id, x => x.Include(x => x.ProductImages).Include(x => x.ProductTags).ThenInclude(x => x.Tag), enableTracking: false);
+            var product = await _productService.GetAsync(x => x.Id == id, x => x.Include(x => x.ProductImages).Include(x => x.ProductTags).ThenInclude(x => x.Tag).Include(x=>x.Category), enableTracking: false);
 
             if (product.Data == null)
                 return NotFound();
             await _productService.IncrementViewCountAsync(id);
+            var related = await _productService.GetListAsync(x => x.CategoryId == product.Data.Category.Id&&x.Id!=product.Data.Id, x => x.Include(x => x.ProductImages).Include(x => x.Category), enableTracking: false);
+            var detailVm = new DetailsViewModel { Product = product.Data, RelatedProducts = related.Data.ToList() };
 
-            return View(product.Data);
+            return View(detailVm);
         }
 
         public async Task<IActionResult> Cart()

@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-3 ">
-                    <a href="#" class="site-brand">
+                    <a asp-action="index" asp-controller="home" class="site-brand">
                         <img src="~/image/logo.png" alt="">
                     </a>
                 </div>
@@ -216,18 +216,22 @@
                     </nav>
                 </div>
                 <div class="col-lg-5">
-                    <div class="header-search-block">
-                        <input type="text" placeholder="Search entire store here">
-                        <button>Search</button>
+                    <div class="header-search-block">   
+                        <input type="text" id="searchInput" onkeyup="search()" autocomplete="off"placeholder="Search entire store here">
+                        <div id="searchDropdown" class="dropdown-content">
+                        </div>  
+                        @* <button>Search</button> *@
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="main-navigation flex-lg-right">
                         <div class="cart-widget">
                             <div class="login-block">
-                                @if (Context.User.Identity.IsAuthenticated)
+                                @if (Context.User.Identity!.IsAuthenticated)
                                 {
                                     <span class="font-weight-bold">Welcome back @Context.User.Identity.Name :)</span>
+                                    <a asp-controller="account" asp-action="logout" class="font-weight-bold" style="color:darkcyan">Sign Out</a> <br>
+
                                 }
                                 else
                                 {

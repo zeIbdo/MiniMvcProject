@@ -32,5 +32,18 @@ namespace MiniMvcProject.ADMIN.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+
+        public async Task<IActionResult> LogOut()
+        {
+            var result = await _accountService.SignOutAsync();
+
+
+            if (result is false)
+                return BadRequest();
+
+            return RedirectToAction("Index", "Home");
+
+        }
     }
 }

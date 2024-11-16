@@ -43,9 +43,9 @@
                     @if (product.DiscountPrice != 0)
                     {
 
-                        var discount = Math.Round(((product.MainPrice - product.DiscountPrice) / product.MainPrice), 1)*100;
-                        <span class="price">@product.MainPrice</span>
-                        <del class="price-old">@product.DiscountPrice</del>
+                        var discount = Math.Round(((product.MainPrice - product.DiscountPrice) / product.MainPrice), 2)*100;
+                        <span class="price">@product.DiscountPrice</span>
+                        <del class="price-old">@product.MainPrice</del>
                         <span class="price-discount">@discount%</span>
 
 

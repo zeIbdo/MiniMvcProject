@@ -14,8 +14,12 @@
             foreach (var item in Model)
             {
                 var product = await service.GetAsync(item.ProductId);
-                price += item.Count * product.Data!.MainPrice;
-            }
+                if (product.Data.DiscountPrice != 0)
+                    price += item.Count * product.Data!.DiscountPrice;
+                else
+                    price += item.Count * product.Data!.MainPrice;
+
+        }
         }
         £@price
         <i class="fas fa-chevron-down"></i>

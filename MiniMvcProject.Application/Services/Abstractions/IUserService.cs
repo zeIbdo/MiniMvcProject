@@ -5,7 +5,7 @@ namespace MiniMvcProject.Application.Services.Abstractions
 {
     public interface IUserService
     {
-        List<AppUserViewModel> GetAppUsers();
+        Task<List<AppUserViewModel>> GetAppUsersAsync();
         Task<bool> AssignRoleAsync(string id, string role);
         Task<AppUserRoleChangeViewModel> GetRoleChangeViewModelAsync(AppUser user);
         Task<bool?> ChangeStatus(AppUserStatusChangeViewModel vm);

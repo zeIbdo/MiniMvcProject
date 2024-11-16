@@ -1,0 +1,15 @@
+﻿@model List<ProductViewModel>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var product in Model)
+        {
+            <li data-id="@product.Id"><a asp-action="details" asp-controller="home" asp-route-id="@product.Id" class="list-item-link">@product.Name</a></li>
+        }
+    </ul>
+}
+else
+{
+    <p>No products found</p>
+}

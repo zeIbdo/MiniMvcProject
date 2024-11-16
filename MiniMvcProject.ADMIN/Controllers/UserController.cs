@@ -21,9 +21,9 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var users = _userService.GetAppUsers();
+        var users =await _userService.GetAppUsersAsync();
 
         return View(users);
     }
@@ -32,7 +32,7 @@ public class UserController : Controller
     {
         var user = _userManager.Users.FirstOrDefault(u => u.Id == id);
         
-        if (user == null) return NotFound();
+        if (user == null) return BadRequest();
         return View(await _userService.GetRoleChangeViewModelAsync(user));
     }
 
@@ -43,6 +43,7 @@ public class UserController : Controller
             return View(vm);
 
         var result = await _userService.AssignRoleAsync(vm.Id, vm.Role);
+        if (result == false) return BadRequest();
 
        
         return RedirectToAction(nameof(Index));

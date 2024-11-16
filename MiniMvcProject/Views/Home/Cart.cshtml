@@ -29,9 +29,10 @@
                                     {
                                         
                                             var product = (await service.GetAsync(x => x.Id == item.ProductId, include: x => x.Include(x => x.ProductImages), enableTracking: false)).Data;
-                                        
-                                        <tr>
-                                            <td class="pro-remove">
+
+                                        <tr data-product-id="@product.Id">
+                                            <input type="hidden" asp-for="@item.Id" value="" />
+                                            <td  class="pro-remove">
                                                 <a href="#"><i class="far fa-trash-alt"></i></a>
                                             </td>
                                             <td class="pro-thumbnail">
@@ -42,17 +43,28 @@
                                             <td class="pro-title"><a href="#">@product.Name</a></td>
                                             @if (product.DiscountPrice != 0)
                                             {
-                                                <td class="pro-price"><span>$@product.DiscountPrice</span></td>
+                                                <td class="pro-price">@product.DiscountPrice</td>
                                             }
                                             else
                                             {
-                                                <td class="pro-price"><span>$@product.MainPrice</span></td>                                                
+                                                <td class="pro-price"> @product.MainPrice</td>
                                             }
-                                            <td class="pro-quantity">
+
+                                            @* <td class="pro-quantity">
                                                 <div class="pro-qty">
                                                     <div class="count-input-block">
                                                         <input type="number" class="form-control text-center"
                                                                value="@item.Count">
+                                                    </div>
+                                                </div>
+                                            </td> *@
+                                            <td class="pro-quantity">
+                                                <div class="pro-qty">
+                                                    <div class="count-input-block d-flex align-items-center">
+                                                        <a  asp-action="Decrease" asp-route-productId="@item.ProductId" class="btn btn-sm btn-outline-secondary minus-btn">-</a>
+                                                        <input type="number" class="form-control text-center mx-2 quantity-input"
+                                                               value="@item.Count" min="1" readonly>
+                                                        <a asp-action="AddToBasket" asp-route-productId="@item.ProductId" class="btn btn-sm btn-outline-secondary plus-btn">+</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -77,9 +89,7 @@
                     <div class="cart-summary">
                         <div class="cart-summary-wrap">
                             <h4><span>Cart Summary</span></h4>
-                            <p>Sub Total <span class="text-primary">$1250.00</span></p>
-                            <p>Shipping Cost <span class="text-primary">$00.00</span></p>
-                            <h2>Grand Total <span class="text-primary">$1250.00</span></h2>
+                            <h2> Total <span class="text-primary">$1250.00</span></h2>
                         </div>
                         <div class="cart-summary-button">
                             <a href="checkout.html" class="checkout-btn c-btn btn--primary">Checkout</a>

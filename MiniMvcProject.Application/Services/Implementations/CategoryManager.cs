@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.Services.Implementations.Generic;
 using MiniMvcProject.Application.ViewModels.CategoryViewModels;
@@ -11,8 +12,10 @@ namespace MiniMvcProject.Application.Services.Implementations;
 
 public class CategoryManager : CrudManager<Category, CategoryViewModel, CategoryCreateViewModel, CategoryUpdateViewModel>, ICategoryService
 {
+    private readonly IRepository<Category> _categoryRepository;
     public CategoryManager(IRepository<Category> repository, IMapper mapper) : base(repository, mapper)
     {
+        _categoryRepository = repository;
     }
 
     public override async Task<ResultViewModel<CategoryViewModel>> CreateAsync(CategoryCreateViewModel createViewModel)
@@ -23,6 +26,7 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
             return validationResult;
         }
 
+
         return await base.CreateAsync(createViewModel);
     }
 
@@ -31,7 +35,7 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
         var validationResult = await _validateParentId(vm.ParentId);
         if (validationResult != null)
         {
-            return validationResult; 
+            return validationResult;
         }
 
         return await base.UpdateAsync(vm);
@@ -47,8 +51,9 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
                 Message = "Parent ID is invalid."
             };
         }
-        var existCategory = await GetAsync(x=>x.Id == parentId,enableTracking:false);
-        if(existCategory is null)
+        var existCategory = await _categoryRepository.GetAsync(x => x.Id == parentId, include: x => x.Include(x => x.SubCategories));
+
+        if (existCategory is null)
         {
             return new ResultViewModel<CategoryViewModel>
             {
@@ -56,6 +61,12 @@ public class CategoryManager : CrudManager<Category, CategoryViewModel, Category
                 Message = "There is no Category with that ID."
             };
         }
-        return null; 
+        if (existCategory!.SubCategories.Count == 0)
+            return new ResultViewModel<CategoryViewModel>
+            {
+                Success = false,
+                Message = "Cannnot give parent Id to sub category."
+            };
+        return null;
     }
 }

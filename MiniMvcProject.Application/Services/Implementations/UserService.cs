@@ -24,6 +24,8 @@ namespace MiniMvcProject.Application.Services.Implementations
         {
             if(role==null)
                 return false;
+            if(role.ToUpper()=="ADMIN")
+                return false;
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
             var usersRoles = await _userManager.GetRolesAsync(user!);
             await _userManager.RemoveFromRolesAsync(user!, usersRoles);
@@ -46,10 +48,21 @@ namespace MiniMvcProject.Application.Services.Implementations
             return true;
         }
 
-        public List<AppUserViewModel> GetAppUsers()
+        public async Task<List<AppUserViewModel>> GetAppUsersAsync()
         {
             var users = _userManager.Users.ToList();
-            return _mapper.Map<List<AppUserViewModel>>(users);
+            var nonAdminUsers = new List<AppUser>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (!roles.Contains("Admin"))
+                {
+                    nonAdminUsers.Add(user);
+                }
+            }
+            return _mapper.Map<List<AppUserViewModel>>(nonAdminUsers);
         }
 
         public async Task<AppUserRoleChangeViewModel> GetRoleChangeViewModelAsync(AppUser user)

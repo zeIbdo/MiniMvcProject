@@ -28,6 +28,12 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public async Task<bool> LoginAsync(LoginViewModel vm, ModelStateDictionary modelState)
         {
+
+            if (_httpContextAccessor.HttpContext.User.Identity?.IsAuthenticated ?? true)
+            {
+                modelState.AddModelError("","User already signed");
+                return false;
+            }
             if (!modelState.IsValid)
                 return false;
              
@@ -57,6 +63,12 @@ namespace MiniMvcProject.Application.Services.Implementations
        
         public async Task<bool> RegisterAsync(RegisterViewModel vm, ModelStateDictionary modelState)
         {
+
+            if (_httpContextAccessor.HttpContext.User.Identity?.IsAuthenticated ?? true)
+            {
+                modelState.AddModelError("", "User already signed");
+                return false;
+            }
             if (!modelState.IsValid)
                 return false;
 
@@ -67,7 +79,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             }
 
             var newUser = _mapper.Map<AppUser>(vm);
-            newUser.LockoutEnabled=true;
+            newUser.LockoutEnabled=false;
 
             var result = await _userManager.CreateAsync(newUser, vm.Password);
             await _userManager.AddToRoleAsync(newUser,RoleType.Member.ToString());
@@ -86,6 +98,7 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public async Task<bool> SignOutAsync()
         {
+            
             await _signInManager.SignOutAsync();
 
             return true;

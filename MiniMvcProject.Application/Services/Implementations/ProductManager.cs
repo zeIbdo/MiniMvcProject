@@ -131,6 +131,10 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public override async Task<ResultViewModel<ProductViewModel>> UpdateAsync(ProductUpdateViewModel vm)
         {
+
+            if (vm.Name.Length < 3)
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "name must be at least 3 char" };
+
             if (!(vm.Rating <= 5 && vm.Rating >= 0))
                 return new ResultViewModel<ProductViewModel> { Success = false, Message = "Rating must be between 0 and 5" };
 
@@ -223,11 +227,15 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public override async Task<ResultViewModel<ProductViewModel>> CreateAsync(ProductCreateViewModel createViewModel)
         {
+            if (createViewModel.Name.Length < 3)
+                return new ResultViewModel<ProductViewModel> { Success = false, Message = "name must be at least 3 char" };
+
+
             if (!(createViewModel.Rating <= 5 && createViewModel.Rating >= 0))
                 return new ResultViewModel<ProductViewModel> { Success = false, Message = "Rating must be between 0 and 5" };
 
             var result = _validate(createViewModel.MainPrice);
-            if (result != null) return result;
+            if (result != null) return result;           
 
             result = _validate(createViewModel.DiscountPrice);
             if (result != null) return result;
@@ -240,6 +248,8 @@ namespace MiniMvcProject.Application.Services.Implementations
 
             result = _validate(createViewModel.StockAmount);
             if (result != null) return result;
+
+
 
             var subscribers = await _subscriptionService.GetListAsync(enableTracking: false);
 
