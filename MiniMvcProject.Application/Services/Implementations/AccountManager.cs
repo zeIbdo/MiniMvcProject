@@ -48,7 +48,7 @@ namespace MiniMvcProject.Application.Services.Implementations
                 return false;
             }
 
-            if(user.LockoutEnabled)
+            if(user.IsDisabled)
                 return false;
 
             var result = await _signInManager.PasswordSignInAsync(user, vm.Password, vm.RememberMe,true);
@@ -79,7 +79,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             }
 
             var newUser = _mapper.Map<AppUser>(vm);
-            newUser.LockoutEnabled=false;
+            newUser.IsDisabled = false;
 
             var result = await _userManager.CreateAsync(newUser, vm.Password);
             await _userManager.AddToRoleAsync(newUser,RoleType.Member.ToString());

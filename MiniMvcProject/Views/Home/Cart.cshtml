@@ -33,7 +33,7 @@
                                         <tr data-product-id="@product.Id">
                                             <input type="hidden" asp-for="@item.Id" value="" />
                                             <td  class="pro-remove">
-                                                <a href="#"><i class="far fa-trash-alt"></i></a>
+                                                <a asp-action="deletefrombasket" asp-controller="home" asp-route-id="@item.ProductId"><i class="far fa-trash-alt"></i></a>
                                             </td>
                                             <td class="pro-thumbnail">
                                                 <a href="#">

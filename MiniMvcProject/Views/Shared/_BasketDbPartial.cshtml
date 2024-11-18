@@ -45,7 +45,7 @@
 
         <div class=" single-cart-block ">
             <div class="cart-product">
-                <a href="product-details.html" class="image">
+                <a asp-action="details" asp-controller="home" asp-route-id="@basket.ProductId" class="image">
                     <img src="@product.Data!.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" alt="" style="height:100px; width:100px">
                 </a>
                 <div class="content">

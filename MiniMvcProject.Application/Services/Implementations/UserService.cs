@@ -41,7 +41,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             var user = await _userManager.FindByIdAsync(vm.AppUserId);
 
             if (user == null) return null;
-            user.LockoutEnabled = vm.OnLockout;
+            user.IsDisabled = vm.IsDisabled;
             await _userManager.UpdateSecurityStampAsync(user);
 
             await _userManager.UpdateAsync(user);

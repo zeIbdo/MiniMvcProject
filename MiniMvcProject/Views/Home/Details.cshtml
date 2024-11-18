@@ -318,7 +318,8 @@
                                         <input type="number" class="form-control text-center" value="1">
                                     </div>
                                     <div class="add-cart-btn">
-                                        <a href="#" class="btn btn-outlined--primary">
+                                        <a data-product-id="@Model.Product.Id" onclick="addToBasket(@Model.Product.Id)" class="single-btn">
+                                        
                                             <span class="plus-icon">+</span>Add to Cart
                                         </a>
                                     </div>

@@ -1277,7 +1277,7 @@ Deal of the day
                                             <img src="@item.Images?.FirstOrDefault(s => s.IsSecondary == true)?.ImageUrl" style="height:300px; width:300px" alt="Product Image">
                                         </a>
                                         <div class="hover-btns">
-                                            <a href="cart.html" class="single-btn">
+                                            <a data-product-id="@item.Id" onclick="addToBasket(@item.Id)" class="single-btn">
                                                 <i class="fas fa-shopping-basket"></i>
                                             </a>
                                             <a href="wishlist.html" class="single-btn">

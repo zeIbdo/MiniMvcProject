@@ -12,5 +12,8 @@ namespace MiniMvcProject.Application.Services.Abstractions
         Task DecreaseProductsToDbBasketAsync(int productId);
 
         Task DecreaseBasketItemAsync(int productId);
+         Task<bool> DeleteFromDB(int productId);
+         Task<List<BasketItemViewModel>> DeleteFromCookie(int productId);
+
     }
 }

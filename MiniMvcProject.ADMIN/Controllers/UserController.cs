@@ -55,7 +55,7 @@ public class UserController : Controller
 
         if (user == null) return NotFound();
 
-        return View(new AppUserStatusChangeViewModel { AppUserId=user.Id,OnLockout=user.LockoutEnabled });
+        return View(new AppUserStatusChangeViewModel { AppUserId=user.Id,IsDisabled=user.IsDisabled });
     }
 
     [HttpPost]

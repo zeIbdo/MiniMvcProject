@@ -1,7 +1,10 @@
-﻿@model Paginate<ProductViewModel>
+﻿@using MiniMvcProject.Domain.Enums
+@model ShopViewModel
 @{
     var pageSizes = new List<int> { 1, 3, 5, 7, 10 };
     var currentPage = Model.Index + 1;
+    var sortTypes = Enum.GetNames<SortTypes>();
+
 }
 
 <main class="inner-page-sec-padding-bottom">
@@ -13,7 +16,7 @@
                         @*Deleted from some unnecessary buttons*@
                         <div class="col-xl-5 col-md-5 col-sm-6  mt--10 mt-sm--0">
                             <span class="toolbar-status">
-                                Showing  @currentPage of @Model.Pages (@Model.Count Products)
+                                Showing  @currentPage of @Model.PaginatedProducts.Pages (@Model.PaginatedProducts.Count Products)
                             </span>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-6  mt--10 mt-md--0">
@@ -24,11 +27,11 @@
                                     {
                                         if (Model.Size == size)
                                         {
-                                            <option value="@Url.Action("Index", "Shop", new { index = 0, size = size })" selected="selected">@size</option>
+                                            <option value="@Url.Action("Index", "Shop", new { index = 0, size = size,sortBy=Model.SortType })" selected="selected">@size</option>
                                         }
                                         else
                                         {
-                                            <option value="@Url.Action("Index", "Shop", new { index = 0, size = size })">@size</option>
+                                            <option value="@Url.Action("Index", "Shop", new { index = 0, size = size,sortBy=Model.SortType })">@size</option>
                                         }
 
                                     }
@@ -39,40 +42,21 @@
                         <div class="col-lg-5 col-md-5 col-sm-6 mt--10 mt-md--0 ">
                             <div class="sorting-selection">
                                 <span>Sort By:</span>
-                                <select class="form-control nice-select sort-select mr-0">
-                                    <option value="" selected="selected">Default Sorting</option>
-                                    <option value="">
-                                        Sort
-                                        By:Name (A - Z)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Name (Z - A)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Price (Low &gt; High)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Price (High &gt; Low)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Rating (Highest)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Rating (Lowest)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Model (A - Z)
-                                    </option>
-                                    <option value="">
-                                        Sort
-                                        By:Model (Z - A)
-                                    </option>
+                                <select class="form-control nice-select sort-select mr-0" onchange="window.location.href=this.value;">
+                                    @foreach(var sortType in sortTypes)
+                                    {
+                                        if (Model.SortType.ToString() == sortType)
+                                        {
+                                            <option value="@Url.Action("Index", "Shop", new { index = Model.Index, size = Model.Size,sortBy=sortType })" selected="selected">@sortType</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option value="@Url.Action("Index", "Shop", new { index = Model.Index, size = Model.Size,sortBy=sortType })" >@sortType</option>
+
+                                        }
+                                    }
+                                    
                                 </select>
                             </div>
                         </div>
@@ -80,7 +64,7 @@
                 </div>
                 @* deleted unnecessary things from here *@
                 <div class="shop-product-wrap grid with-pagination row space-db--30 shop-border">
-                    @foreach (var item in Model.Items)
+                    @foreach (var item in Model.PaginatedProducts.Items)
                     {
 
                         <div class="col-lg-4 col-sm-6">
@@ -134,44 +118,44 @@
                     <div class="col-md-12">
                         <div class="pagination-block">
                             <ul class="pagination-btns flex-center">
-                               
-                                @if (Model.HasPrevious)
+
+                                @if (Model.PaginatedProducts.HasPrevious)
                                 {
-                                <li>
-                                    <a href="@Url.Action("Index", new { index = 0, size = Model.Size })" class="single-btn prev-btn ">
-                                        |<i class="zmdi zmdi-chevron-left"></i>
-                                    </a>
-                                </li>
-                                    
-                                <li>
-                                    <a href="@Url.Action("Index", new { index = Model.Index-1, size = Model.Size })" class="single-btn prev-btn ">
-                                        <i class="zmdi zmdi-chevron-left"></i>
-                                    </a>
-                                </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", new { index = 0, size = Model.Size,sortBy=Model.SortType })" class="single-btn prev-btn ">
+                                            |<i class="zmdi zmdi-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Index", new { index = Model.Index-1, size = Model.Size,sortBy=Model.SortType })" class="single-btn prev-btn ">
+                                            <i class="zmdi zmdi-chevron-left"></i>
+                                        </a>
+                                    </li>
                                 }
-                                @for (int i = 0; i < Model.Pages; i++)
+                                @for (int i = 0; i < Model.PaginatedProducts.Pages; i++)
                                 {
                                     <li class="@(i == Model.Index ? "active" : "")">
-                                        @Html.ActionLink((i + 1).ToString(), "Index", new { index = i, size = Model.Size }, new { @class = "single-btn" })
+                                        @Html.ActionLink((i + 1).ToString(), "Index", new { index = i, size = Model.Size, sortBy = Model.SortType }, new { @class = "single-btn" })
 
                                     </li>
                                     if (i == 6) break;
 
                                 }
 
-                                @if (Model.HasNext)
+                                @if (Model.PaginatedProducts.HasNext)
                                 {
-                                <li>
-                                    <a href="@Url.Action("Index", new { index = Model.Index+1, size = Model.Size })" class="single-btn next-btn">
-                                        <i class="zmdi zmdi-chevron-right"></i>
-                                    </a>
-                                </li>
-                                    
-                                <li>
-                                    <a href="@Url.Action("Index", new { index = (Model.Pages - 1), size = Model.Size })" class="single-btn next-btn">
-                                        <i class="zmdi zmdi-chevron-right"></i>|
-                                    </a>
-                                </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", new { index = Model.Index+1, size = Model.Size ,sortBy=Model.SortType})" class="single-btn next-btn">
+                                            <i class="zmdi zmdi-chevron-right"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Index", new { index = (Model.PaginatedProducts.Pages - 1), size = Model.Size,sortBy=Model.SortType })" class="single-btn next-btn">
+                                            <i class="zmdi zmdi-chevron-right"></i>|
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </div>
@@ -335,27 +319,33 @@
                     <div class="single-block">
                         <h3 class="sidebar-title">Categories</h3>
                         <ul class="sidebar-menu--shop">
-                            <li><a href="#">Accessories (5)</a></li>
-                            <li><a href="#">Arts & Photography (10)</a></li>
-                            <li><a href="#">Biographies (16)</a></li>
-                            <li><a href="#">Business & Money (0)</a></li>
-                            <li><a href="#">Calendars (6)</a></li>
-                            <li><a href="#">Children's Books (9)</a></li>
-                            <li><a href="#">Comics (16)</a></li>
-                            <li><a href="#">Cookbooks (7)</a></li>
-                            <li><a href="#">Education (3)</a></li>
-                            <li><a href="#">House Plants (6)</a></li>
-                            <li><a href="#">Indoor Living (9)</a></li>
-                            <li><a href="#">Perfomance Filters (5)</a></li>
-                            <li>
-                                <a href="#">Shop (16)</a>
-                                <ul class="inner-cat-items">
-                                    <li><a href="#">Saws (0)</a></li>
-                                    <li><a href="#">Concrete Tools (7)</a></li>
-                                    <li><a href="#">Drills (2)</a></li>
-                                    <li><a href="#">Sanders (1)</a></li>
-                                </ul>
-                            </li>
+                            @foreach (var item in Model.Categories)
+                            {
+                                if (item.HasSubCategories && item.ParentId == null)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index", "Shop", new { index = 0, size = Model.Size, categoryId=item.Id,sortBy=Model.SortType })">@item.Name</a>
+                                        <ul style="list-style:decimal;" class="inner-cat-items">
+                                            @foreach (var sub in item.SubCategories)
+                                            {
+                                                <li><a href="@Url.Action("Index", "Shop", new { index = 0, size = Model.Size, categoryId=sub.Id ,sortBy=Model.SortType})">@sub.Name</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+
+                                }
+                                else
+                                {
+                                    if (item.ParentId == null)
+                                    {
+
+                                        <li><a href="@Url.Action("Index", "Shop", new { index = 0, size = Model.Size, categoryId=item.Id ,sortBy=Model.SortType})">@item.Name</a></li>
+                                    }
+
+                                }
+                            }
+
+                           
                         </ul>
                     </div>
                     <!-- Price -->

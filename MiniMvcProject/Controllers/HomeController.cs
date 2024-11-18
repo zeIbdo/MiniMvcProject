@@ -1,10 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.UI.ViewModels;
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
 using MiniMvcProject.Application.ViewModels.SubscriptionViewModels;
+using MiniMvcProject.Domain.Entities;
 
 namespace MiniMvcProject.Controllers
 {
@@ -35,7 +37,7 @@ namespace MiniMvcProject.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var resultCategories = await _categoryService.GetListAsync(predicate: x => x.SubCategories.Count == 0 && x.ParentCategoryId == null, index: 0, size: 3);
+            var resultCategories = await _categoryService.GetListAsync(predicate: x =>  x.ParentCategoryId !=null, index: 0, size: 3);
             var sliders = await _sliderService.GetListAsync(enableTracking: false);
             var services = await _serviceService.GetListAsync(enableTracking: false);
             var products = await _productService.GetListAsync(include: x => x.Include(x => x.ProductImages).Include(x => x.ProductImages).Include(x => x.BasketItems), orderBy: x => x.OrderByDescending(x => x.BasketItems.Sum(x => x.Count)), enableTracking: false);
@@ -59,7 +61,7 @@ namespace MiniMvcProject.Controllers
             return PartialView("_RelatedProducts", productsResult.Data!.ToList());
         }
 
-
+        
         public async Task<IActionResult> AddToBasket(int productId)
         {
             if (HttpContext.User.Identity!.IsAuthenticated)
@@ -160,6 +162,23 @@ namespace MiniMvcProject.Controllers
                 basketItems = _basketItemService.GetBasketCookies();
             }
             return View(basketItems);
+        }
+        public async Task<IActionResult> DeleteFromBasket(int id)
+        {
+            if (HttpContext.User.Identity!.IsAuthenticated)
+            {
+                var result =await _basketService.DeleteFromDB(id);
+                if (!result)
+                    return NotFound();
+
+                    return RedirectToAction(nameof(Cart));
+
+            }
+            else
+            {
+                var vms = await _basketService.DeleteFromCookie(id);
+                return RedirectToAction(nameof(Cart));
+            }
         }
     }
 }
