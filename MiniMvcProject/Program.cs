@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using MiniMvcProject.Application;
+using MiniMvcProject.DAL.DataContext;
 using MiniMvcProject.Persistance;
 
 
@@ -19,6 +21,8 @@ namespace MiniMvcProject
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<AppDbContext>();
+                await context.Database.MigrateAsync();
                 await SeedData.Initialize(services);
 
             }

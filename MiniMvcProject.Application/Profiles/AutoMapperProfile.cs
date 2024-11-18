@@ -158,6 +158,9 @@ namespace MiniMvcProject.Application.Profiles
 
 
             CreateMap<AppUser, AppUserViewModel>().ReverseMap();
+            CreateMap<Paginate<Product>,Paginate<ProductViewModel>>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
+                .ReverseMap();
         }
     }
-}
+}   

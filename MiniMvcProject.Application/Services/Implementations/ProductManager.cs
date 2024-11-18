@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using core.Persistance.Paging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.Services.Implementations.Generic;
 using MiniMvcProject.Application.ViewModels.CategoryViewModels;
@@ -10,7 +12,9 @@ using MiniMvcProject.Application.ViewModels.ProductTagViewModels;
 using MiniMvcProject.Application.ViewModels.ProductViewModels;
 using MiniMvcProject.Application.ViewModels.TagViewModels;
 using MiniMvcProject.Domain.Entities;
+using MiniMvcProject.Persistance.Repositories.Abstractions;
 using MiniMvcProject.Persistance.Repositories.Abstractions.Generic;
+using System.Linq.Expressions;
 
 namespace MiniMvcProject.Application.Services.Implementations
 {
@@ -23,10 +27,11 @@ namespace MiniMvcProject.Application.Services.Implementations
         private readonly ITagService _tagService;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IRepository<Product> _repository;
+        private readonly IProductRepository _productRepository;
         private readonly IProductTagService _productTagService;
         private readonly IProductImageService _productImageService;
         private readonly IMapper _mapper;
-        public ProductManager(IRepository<Product> repository, IMapper mapper, ICategoryService categoryService, ITagService tagService, ICloudinaryService cloudinaryService, IProductTagService productTagService, IProductImageService productImageService, ISubscriptionService subscriptionService, IEmailService emailService) : base(repository, mapper)
+        public ProductManager(IRepository<Product> repository, IMapper mapper, ICategoryService categoryService, ITagService tagService, ICloudinaryService cloudinaryService, IProductTagService productTagService, IProductImageService productImageService, ISubscriptionService subscriptionService, IEmailService emailService, IProductRepository productRepository) : base(repository, mapper)
         {
             _categoryService = categoryService;
             _tagService = tagService;
@@ -37,6 +42,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             _productImageService = productImageService;
             _subscriptionService = subscriptionService;
             _emailService = emailService;
+            _productRepository = productRepository;
         }
 
         public async Task<ProductCreateViewModel> GetProductCreateViewModelAsync(ProductCreateViewModel productCreateViewModel)
@@ -344,6 +350,12 @@ namespace MiniMvcProject.Application.Services.Implementations
             var product = await _repository.GetAsync(id);
             product!.ViewCount++;
             await _repository.UpdateAsync(product);
+        }
+
+        public async Task<Paginate<ProductViewModel>> GetPaginatedProductsAsync(Expression<Func<Product, bool>>? predicate = null, Func<IQueryable<Product>, IIncludableQueryable<Product, object>>? include = null, Func<IQueryable<Product>, IOrderedQueryable<Product>>? orderBy = null, int index = 0, int size = int.MaxValue)
+        {
+            var products = await _productRepository.GetPaginatedProductsAsync(predicate, include, orderBy, index, size);
+            return _mapper.Map<Paginate<ProductViewModel>>(products);
         }
     }
 

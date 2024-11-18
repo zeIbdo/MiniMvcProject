@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniMvcProject.Application.Services.Abstractions;
 using MiniMvcProject.Application.UI.ViewModels;
-using MiniMvcProject.Application.Utilities;
 using MiniMvcProject.Application.ViewModels.BasketItemViewModels;
-using MiniMvcProject.Application.ViewModels.ProductViewModels;
 using MiniMvcProject.Application.ViewModels.SubscriptionViewModels;
-using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace MiniMvcProject.Controllers
 {

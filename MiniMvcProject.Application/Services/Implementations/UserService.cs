@@ -16,7 +16,7 @@ namespace MiniMvcProject.Application.Services.Implementations
 
         public UserService(UserManager<AppUser> userManager, IMapper mapper)
         {
-            _userManager = userManager;
+            _userManager = userManager;   
             _mapper = mapper;
         }
 
