@@ -165,7 +165,13 @@ namespace MiniMvcProject.Application.Services.Implementations
             if (product == null)
                 return new ResultViewModel<ProductViewModel>() { Message = "not found" };
 
-            product = _mapper.Map(vm, product);
+			var category = await _categoryService.GetAsync(x => x.Id == vm.CategoryId, include: x => x.Include(x => x.ParentCategory), enableTracking: false);
+
+			if ((category).Data == null || category.Data.ParentId == null)
+				return new ResultViewModel<ProductViewModel> { Success = false, Message = "Invalid category id" };
+
+
+			product = _mapper.Map(vm, product);
 
             foreach (var item in vm.OldTagIds ?? new List<int>())
             {
@@ -236,7 +242,7 @@ namespace MiniMvcProject.Application.Services.Implementations
             if (createViewModel.Name.Length < 3)
                 return new ResultViewModel<ProductViewModel> { Success = false, Message = "name must be at least 3 char" };
 
-
+            
             if (!(createViewModel.Rating <= 5 && createViewModel.Rating >= 0))
                 return new ResultViewModel<ProductViewModel> { Success = false, Message = "Rating must be between 0 and 5" };
 
@@ -258,8 +264,9 @@ namespace MiniMvcProject.Application.Services.Implementations
 
 
             var subscribers = await _subscriptionService.GetListAsync(enableTracking: false);
+            var category = await _categoryService.GetAsync(x => x.Id == createViewModel.CategoryId,include:x=>x.Include(x=>x.ParentCategory), enableTracking: false);
 
-            if ((await _categoryService.GetAsync(x => x.Id == createViewModel.CategoryId, enableTracking: false)).Data == null)
+			if ((category).Data == null||category.Data.ParentId==null)
                 return new ResultViewModel<ProductViewModel> { Success = false, Message = "Invalid category id" };
 
             var createdProductResult = await base.CreateAsync(createViewModel);

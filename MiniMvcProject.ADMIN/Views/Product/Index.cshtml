@@ -25,15 +25,9 @@
                             {
                                 <tr>
                                     <td>@item.Id</td>
-                                    @{
-                                    if (@item.Images!.FirstOrDefault(x => x.IsMain == true) != null)
-                                    {                                        
-                                    <td> <img src=" @item.Images!.FirstOrDefault(x=>x.IsMain==true)!.ImageUrl" style="height:150px; width:115px; border-radius:0px" /></td>
-                                    } 
-                                    else{
-                                        <td>No Image</td>
-                                    }
-                                    }
+                                                                      
+                                    <td> <img src=" @item.Images!.FirstOrDefault(x=>x.IsMain==true)?.ImageUrl" alt="@item.Name" style="height:150px; width:115px; border-radius:0px" /></td>
+                            
     
                                     <td>@item.Name</td>
                                     <td>@item.MainPrice</td>
